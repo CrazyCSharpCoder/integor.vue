@@ -9,10 +9,10 @@
         </div>
       </div>
       <div class="form-field">
-        <input v-model="input.botToken" type="text" placeholder="Токен бота"
-               :class="['input', {error: botTokenInvalid}]"/>
-        <div v-if="botTokenInvalid" class="input-error">
-          {{outputFirst(v$.input.botToken)}}
+        <input v-model="input.token" type="text" placeholder="Токен бота"
+               :class="['input', {error: tokenInvalid}]"/>
+        <div v-if="tokenInvalid" class="input-error">
+          {{outputFirst(v$.input.token)}}
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@ export default {
     return {
       input: {
         title: '',
-        botToken: ''
+        token: ''
       }
     }
   },
@@ -51,8 +51,8 @@ export default {
     titleInvalid() {
       return Boolean(this.errorsCount(this.v$.input.title))
     },
-    botTokenInvalid() {
-      return Boolean(this.errorsCount(this.v$.input.botToken))
+    tokenInvalid() {
+      return Boolean(this.errorsCount(this.v$.input.token))
     }
   },
   validations() {
@@ -70,14 +70,14 @@ export default {
               maxLength(this.$appConfiguration.validation.bots.title.maxLength)
           )
         },
-        botToken: {
+        token: {
           required: helpers.withMessage(
               this.$modelValidation.required(),
               required
           ),
           isTelegramToken: helpers.withMessage(
               'Значение не является токеном Telegram бота',
-              () => this.$appConfiguration.validation.bots.botToken(this.input.botToken)
+              () => this.$appConfiguration.validation.bots.token(this.input.token)
           )
         }
       }

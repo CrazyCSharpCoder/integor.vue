@@ -1,29 +1,4 @@
-const botsMock = [
-    {
-        id: 1,
-        title: 'Мой бот',
-        botToken: 'fdsgseghsd-khfjsdvgfbjfkd-fbsdjfg',
-        totalEvents: 561
-    },
-    {
-        id: 2,
-        title: 'Мой бот 2',
-        botToken: 'gfhfdhokdfj-nhkdfgjpdgjn-bfgilfkgjdn',
-        totalEvents: 40
-    },
-    {
-        id: 3,
-        title: 'Ещё один бот',
-        botToken: 'jghjhgkgd-fgfdhfjfhgfjfcv-bvcbsjgfjgf',
-        totalEvents: 7556
-    },
-    {
-        id: 4,
-        title: 'Мой бот',
-        botToken: 'agfndjgsd-fklekrkweuiigfsi-gbfxnmveew',
-        totalEvents: 423
-    },
-]
+import api from "@/api";
 
 export default {
     state() {
@@ -39,20 +14,28 @@ export default {
     mutations: {
         SET_MY_BOTS(state, bots) {
             state.myBots = bots
+        },
+        APPEND_BOT(state, bot) {
+            state.myBots.push(bot)
         }
     },
     actions: {
         async loadBots({commit}) {
-            botsMock.sort((a, b) => {
-                if (a.title != b.title)
-                    return a.title < b.title ? 1 : -1
+            const bots = await api.bots.getAll()
+            commit('SET_MY_BOTS', bots)
 
-                return a.id > b.id ? 1 : -1
-            })
+            return bots
+        },
+        async addBot({commit, getters}, bot) {
+            const addedBot = await api.bots.addBot(bot)
 
-            setTimeout(() => {
-                commit('SET_MY_BOTS', botsMock)
-            }, 2000)
+            if (!getters['myBots'])
+                commit('SET_MY_BOTS', [addedBot])
+
+            else
+                commit('APPEND_BOT', addedBot)
+
+            return addedBot
         }
     }
 }

@@ -25,7 +25,7 @@ export default {
   ],
   methods: {
     async addBot(bot) {
-      console.log(bot)
+      await this.$store.dispatch('addBot', bot)
       this.close()
     },
     dispose() {

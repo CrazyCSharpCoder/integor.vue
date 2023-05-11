@@ -10,6 +10,7 @@ import configuration from "@/plugins/appConfiguration";
 import emitter from "@/plugins/emitter";
 import appEvents from "@/plugins/appEvents";
 import formHelpers from "@/plugins/formHelpers";
+import api from "@/plugins/api";
 
 const app = createApp(App)
 
@@ -22,7 +23,8 @@ const plugins = [
     configuration,
     emitter,
     appEvents,
-    formHelpers
+    formHelpers,
+    api
 ]
 
 for (let plugin of plugins)

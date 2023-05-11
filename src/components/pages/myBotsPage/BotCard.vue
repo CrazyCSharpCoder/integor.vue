@@ -1,17 +1,18 @@
 <template>
   <section class="bot-card">
     <div class="bot-card-header">
-      <div class="bot-title">{{item.title}}</div>
-      <div class="bot-event-count"><b>{{item.totalEvents}}</b> событий</div>
+      <div class="bot-title">{{item.bot.title}}</div>
+<!--      TODO correct notation-->
+      <div class="bot-event-count"><b>{{item.total_events}}</b> событий</div>
     </div>
     <div class="bot-token">
-      <hidden-data-display :data="item.botToken" placeholder="Токен бота"/>
+      <hidden-data-display :data="item.bot.token" placeholder="Токен бота"/>
     </div>
     <ul class="bot-card-controls">
       <li class="bot-card-controls-item">
         <router-link :to="{
           name: $routeNames.botInfo,
-          params: {botId: item.id}
+          params: {botId: item.bot.id}
         }" class="open-bot">Перейти</router-link>
       </li>
       <li class="bot-card-controls-item">
