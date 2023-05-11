@@ -1,0 +1,10 @@
+@mixin icon($icon-url, $size) {
+  background-color: transparent;
+  background-image: url($icon-url);
+  background-size: $size;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: $size;
+  height: $size;
+  display: inline-block;
+}

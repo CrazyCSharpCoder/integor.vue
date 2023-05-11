@@ -1,0 +1,39 @@
+@import "../contentAdjustment";
+
+%page-horizontal-content {
+  padding: 0 $page-horizontal-gap;
+}
+
+%page-vertical-content {
+  padding: $page-vertical-gap 0;
+}
+
+%page-content {
+  padding: $page-vertical-gap $page-horizontal-gap;
+}
+
+%content-section {
+  padding: $page-sections-vertical-gap 0;
+}
+
+%full-page-content {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+@mixin vertical-list($margin-vert) {
+  margin: -$margin-vert 0;
+
+  %list-item {
+    padding: $margin-vert 0;
+  }
+}
+
+@mixin horizontal-vertical-list($margin-vert, $margin-hor) {
+  margin: (-$margin-vert) (-$margin-hor);
+
+  %list-item {
+    padding: $margin-vert $margin-hor;
+  }
+}

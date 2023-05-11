@@ -1,5 +1,5 @@
-import getNumber from "@/store/modules/getNumber";
+import myBots from "@/store/modules/myBots";
 
 export default {
-    getNumber
+    myBots
 }

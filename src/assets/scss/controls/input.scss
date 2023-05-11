@@ -1,0 +1,24 @@
+@import "../palette";
+@import "../contentAdjustment";
+
+$input-border-width: 2px;
+
+@mixin input($border-color, $border-focus-color) {
+  outline: none;
+  padding: ($padding-step-small - $input-border-width) ($padding-step - $input-border-width);
+  font-size: inherit;
+
+  border: $input-border-width solid $border-color;
+
+  &:focus, &:hover {
+    border-color: $border-focus-color;
+  }
+
+  &%error-input {
+    border-color: $error-color-1;
+
+    &:focus, &:hover {
+      border-color: $error-color-2;
+    }
+  }
+}
