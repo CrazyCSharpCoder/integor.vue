@@ -47,7 +47,7 @@ export default {
     }
 
     @media (max-width: $medium-threshold) {
-      flex-basis: 50%
+      flex-basis: 100%
     }
 
     flex-basis: 33%

@@ -8,11 +8,15 @@
       <hidden-data-display :data="item.botToken" placeholder="Токен бота"/>
     </div>
     <ul class="bot-card-controls">
-      <li>
+      <li class="bot-card-controls-item">
         <router-link :to="{
           name: $routeNames.botInfo,
           params: {botId: item.id}
-        }" class="open-link">Перейти</router-link>
+        }" class="open-bot">Перейти</router-link>
+      </li>
+      <li class="bot-card-controls-item">
+<!--        TODO add handler-->
+        <button class="delete-bot">В ахрив</button>
       </li>
     </ul>
   </section>
@@ -46,7 +50,7 @@ $separation-border: 1px solid $color-4;
 
 .bot-card {
   border: 1px solid $color-4;
-  padding: $padding-step;
+  padding: 0 $padding-step;
 
   .bot-card-header {
     @extend %breadcrumbs;
@@ -77,8 +81,12 @@ $separation-border: 1px solid $color-4;
     @include panel();
   }
 
-  .open-link {
+  .open-bot {
     @include button($color-5, $color-5-text);
+  }
+
+  .delete-bot {
+    @include button($color-1, $color-1-text);
   }
 }
 

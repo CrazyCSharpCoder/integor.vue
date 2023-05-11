@@ -9,9 +9,7 @@
     </router-view>
   </integor-header>
   <main class="main">
-    <page-adjusted-content>
-      <router-view></router-view>
-    </page-adjusted-content>
+    <router-view></router-view>
   </main>
   <integor-footer>
     <page-adjusted-content>

@@ -1,3 +1,5 @@
+@import "./media";
+
 %link-reset {
   text-decoration: none;
   font-size: inherit;
@@ -23,4 +25,11 @@
   color: $color;
 
   display: block;
+  cursor: pointer;
+}
+
+@mixin icon-button($icon-url, $icon-size) {
+  @extend %button-reset;
+  @include icon($icon-url, $icon-size);
+  cursor: pointer;
 }

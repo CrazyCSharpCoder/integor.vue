@@ -41,15 +41,19 @@ export default {
 
 @import "/src/assets/scss/controls/buttons";
 @import "/src/assets/scss/controls/input";
-@import "/src/assets/scss/controls/neighboursRelation";
 
 .hidden-data {
   display: flex;
   align-items: stretch;
 
+  &:hover {
+    .data {
+      border-color: $color-5;
+    }
+  }
+
   .data {
-    @extend %input;
-    @extend %with-right-neighbour;
+    @include input($color-2, $color-5);
 
     border-right: none;
 
