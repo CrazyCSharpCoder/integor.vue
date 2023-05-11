@@ -1,0 +1,26 @@
+%link-reset {
+  text-decoration: none;
+  font-size: inherit;
+  color: inherit;
+}
+
+%button-reset {
+  background: none;
+  color: inherit;
+
+  border: none;
+  outline: none;
+
+  font-size: inherit;
+}
+
+@mixin button($background, $color) {
+  @extend %link-reset;
+  @extend %button-reset;
+
+  padding: $padding-step-small $padding-step;
+  background: $background;
+  color: $color;
+
+  display: block;
+}

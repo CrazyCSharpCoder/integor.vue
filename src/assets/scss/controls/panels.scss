@@ -1,0 +1,27 @@
+@import "../contentAdjustment";
+
+%list-reset {
+  list-style: none;
+}
+
+@mixin panel($gap: $padding-step) {
+  @extend %list-reset;
+
+  display: flex;
+  justify-content: flex-start;
+
+  gap: $gap;
+}
+
+%breadcrumbs {
+  display: flex;
+  align-items: flex-end;
+
+  %breadcrumbs-item::after {
+    content: '/';
+    padding: 4px;
+  }
+  %breadcrumbs-item:last-child::after {
+    content: none;
+  }
+}

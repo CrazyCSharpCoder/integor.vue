@@ -1,0 +1,10 @@
+@import "../palette";
+@import "../contentAdjustment";
+
+$input-border-width: 2px;
+
+%input {
+  border: $input-border-width solid $color-5;
+
+  padding: ($padding-step-small - $input-border-width) ($padding-step - $input-border-width);
+}
