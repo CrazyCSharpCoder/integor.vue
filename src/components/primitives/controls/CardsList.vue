@@ -1,6 +1,7 @@
 <template>
   <ul class="cards-list">
-    <li class="cards-list-item" v-for="item in items" :key="$generateKey(item)">
+    <li v-for="item in items" :key="$generateKey(item)"
+        class="cards-list-item">
       <component :is="cardComponent" :item="item"/>
     </li>
   </ul>
@@ -16,7 +17,7 @@ export default {
     items: {
       required: true,
       type: Array
-    }
+    },
   }
 }
 </script>

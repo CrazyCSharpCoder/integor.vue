@@ -64,7 +64,7 @@ export default {
     }
   }
   .show-button {
-    @include button($color-1, $color-1-text);
+    @include button($color-1, $color-1-text, $color-5, $color-5-text);
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
 

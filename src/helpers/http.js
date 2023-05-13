@@ -1,14 +1,21 @@
 import ServerError from '@/errorHandling/serverError'
 
-async function handle(url, method = 'GET', body = undefined, asJson = true) {
-    const config = {method}
+function appendQuery(url, queryParams) {
+    return url + '?' + new URLSearchParams(queryParams)
+}
 
-    if (body) {
-        config.body = JSON.stringify(body)
+async function handle(url, params, asJson = true) {
+    const config = {method: params?.method ?? 'GET'}
+
+    if (params?.body) {
+        config.body = JSON.stringify(params.body)
         config.headers = {
             "Content-Type": "application/json"
         }
     }
+
+    if (params?.queryParams && Object.keys(params.queryParams).length)
+        url = appendQuery(url, params.queryParams)
 
     const response = await fetch(url, config)
 

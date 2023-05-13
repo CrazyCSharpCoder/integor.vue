@@ -12,7 +12,10 @@
       <li class="bot-card-controls-item">
         <router-link :to="{
           name: $routeNames.botInfo,
-          params: {botId: item.bot.id}
+          params: {
+            botId: item.bot.id,
+            page: 1
+          }
         }" class="open-bot">Перейти</router-link>
       </li>
       <li class="bot-card-controls-item">
@@ -83,11 +86,11 @@ $separation-border: 1px solid $color-4;
   }
 
   .open-bot {
-    @include button($color-5, $color-5-text);
+    @include button;
   }
 
   .delete-bot {
-    @include button($color-1, $color-1-text);
+    @include button($color-1, $color-1-text, $color-2, $color-2-text);
   }
 }
 
