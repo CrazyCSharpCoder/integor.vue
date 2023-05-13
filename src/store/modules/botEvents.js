@@ -30,10 +30,12 @@ export default {
         }
     },
     mutations: {
-        SET_DATA(state, data) {
-            state.bot = data.bot
-            state.totalEvents = data.total_events
-            state.messages = data.messages
+        SET_EVENTS(state, {messages}) {
+            state.messages = messages
+        },
+        SET_BOT_INFO(state, {bot, totalEvents}) {
+            state.bot = bot
+            state.totalEvents = totalEvents
         },
         DISCARD(state) {
             state.bot = state.totalEvents = state.messages = undefined
@@ -43,15 +45,31 @@ export default {
         discard({commit}) {
             commit('DISCARD')
         },
-        async loadEvents({commit}, {botId, pageIndex}) {
+        async loadAll({commit}, {botId, pageIndex}) {
             const startIndex = pageIndex * pageSize
 
             const botEventsInfo = await api.botEvents.getEvents(
                 botId, startIndex, pageSize
             )
-            commit('SET_DATA', botEventsInfo)
+            commit('SET_BOT_INFO', {
+                bot: botEventsInfo.bot,
+                totalEvents: botEventsInfo.total_events
+            })
+            commit('SET_EVENTS', {
+                messages: botEventsInfo.messages
+            })
 
             return botEventsInfo
+        },
+        async loadBot({commit}, botId) {
+            const botInfo = await api.bots.getBot(botId)
+
+            commit('SET_BOT_INFO', {
+                bot: botInfo.bot,
+                totalEvents: botInfo.total_events}
+            )
+
+            return botInfo
         }
     }
 }

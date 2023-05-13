@@ -1,4 +1,4 @@
-import ServerError from '@/errorHandling/serverError'
+import {ServerError, ConnectionFailedError} from '@/errorHandling/serverErrors'
 
 function appendQuery(url, queryParams) {
     return url + '?' + new URLSearchParams(queryParams)
@@ -17,11 +17,17 @@ async function handle(url, params, asJson = true) {
     if (params?.queryParams && Object.keys(params.queryParams).length)
         url = appendQuery(url, params.queryParams)
 
-    const response = await fetch(url, config)
+    try {
+        var response = await fetch(url, config)
+    }
+    catch {
+        throw new ConnectionFailedError('Could not connect to the server')
+    }
 
     if (!response.ok) {
         throw new ServerError(
             'Server returned an error',
+            response.status,
             response.body)
     }
 

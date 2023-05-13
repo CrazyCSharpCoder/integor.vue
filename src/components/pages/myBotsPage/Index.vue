@@ -1,20 +1,30 @@
 <template>
   <div class="my-bots-page">
-    <integor-extra-header>
-      <page-adjusted-content>
-        <ul class="bots-management-panel">
-          <li class="bots-management-panel-item">
-            <button @click="openAddBotModalWindow" class="bot-action">Добавить</button>
-          </li>
-        </ul>
-      </page-adjusted-content>
-    </integor-extra-header>
-    <section class="my-bots-page-content">
-      <template v-if="myBots">
-        <cards-list v-if="myBots.length > 0" :card-component="cardComponent" :items="myBots"/>
-        <div v-else>У вас не добавлено ни одного бота</div>
-      </template>
-    </section>
+    <loading-display v-if="!myBots"/>
+    <template v-else>
+      <integor-extra-header>
+        <page-adjusted-content>
+          <ul class="bots-management-panel">
+            <li class="bots-management-panel-item">
+              <button @click="openAddBotModalWindow" class="bot-action">Добавить</button>
+            </li>
+          </ul>
+        </page-adjusted-content>
+      </integor-extra-header>
+      <information-display v-if="myBots.length === 0"
+                           :image-ref="require('@/assets/icons/empty-result.svg')"
+                           title="У вас не добавлено ни одного бота"
+                           description="Давайте добавим вашего первого бота прямо сейчас!"
+                           :enable-controls="true"
+      >
+        <template #controls>
+          <button @click="openAddBotModalWindow" class="add-bot">Добавить бота</button>
+        </template>
+      </information-display>
+      <section v-else class="my-bots-page-content">
+        <cards-list :card-component="cardComponent" :items="myBots"/>
+      </section>
+    </template>
     <add-bot-modal-window/>
   </div>
 </template>
@@ -28,10 +38,12 @@ import CardsList from "@/components/primitives/controls/CardsList";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import AddBotModalWindow from "@/components/pages/myBotsPage/AddBotModalWindow";
+import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
+import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
 
 export default {
   name: 'MyBotsPage',
-  components: {AddBotModalWindow, PageAdjustedContent, IntegorExtraHeader, CardsList},
+  components: {LoadingDisplay, InformationDisplay, AddBotModalWindow, PageAdjustedContent, IntegorExtraHeader, CardsList},
   data() {
     return {
       cardComponent: shallowRef(BotCard)
@@ -77,6 +89,10 @@ export default {
       @include button($color-4, $color-4-text);
     }
   }
+}
+
+.add-bot {
+  @include button();
 }
 
 </style>

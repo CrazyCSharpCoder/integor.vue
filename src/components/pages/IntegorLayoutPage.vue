@@ -9,7 +9,8 @@
     </router-view>
   </integor-header>
   <main class="main">
-    <router-view></router-view>
+    <connection-failed-display v-if="hasConnectionFailedError"/>
+    <router-view v-else></router-view>
   </main>
   <integor-footer>
     <page-adjusted-content>
@@ -23,6 +24,7 @@
 
 <script>
 import {shallowRef} from "vue";
+import appEvents from "@/helpers/appEvents";
 import routeNames from "@/router/routeNames";
 
 import IntegorHeader from "@/components/primitives/IntegorHeader";
@@ -30,6 +32,8 @@ import IntegorFooter from "@/components/primitives/IntegorFooter";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import NavigationPanel from "@/components/primitives/panels/NavigationPanel";
 import NavigationItem from "@/components/primitives/special/HeaderNavItem";
+import ConnectionFailderHandlingMixin from '@/components/mixins/ConnectionFailderHandlingMixin'
+import ConnectionFailedDisplay from "@/components/primitives/InformationDisplay/ConnectionFailedDisplay";
 
 const navigationItems = [
   {
@@ -39,7 +43,13 @@ const navigationItems = [
 ]
 
 export default {
-  components: {NavigationPanel, PageAdjustedContent, IntegorFooter, IntegorHeader},
+  components: {ConnectionFailedDisplay, NavigationPanel, PageAdjustedContent, IntegorFooter, IntegorHeader},
+  mixins: [
+      ConnectionFailderHandlingMixin(
+          appEvents.connection.connectionFailedError,
+          appEvents.connection.connectionRestoredError
+      )
+  ],
   data() {
     return {
       navigationItems,

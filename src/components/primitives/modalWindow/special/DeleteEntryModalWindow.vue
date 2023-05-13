@@ -21,7 +21,7 @@
           </li>
         </ul>
       </div>
-      <div v-if="theError" class="error">
+      <div v-if="theError" class="information">
         {{theError}}
       </div>
     </div>
@@ -101,7 +101,7 @@ export default {
   }
 }
 
-.error {
+.information {
   @extend %form-error;
   padding-top: 16px;
 }
