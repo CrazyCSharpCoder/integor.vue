@@ -16,7 +16,7 @@ export default [
                 component: MyBotsPage
             },
             {
-                name: routeNames.botInfo,
+                name: routeNames.botEvents,
                 path: 'bot-:botId/page-:page',
                 component: BotEventsPage
             }

@@ -6,6 +6,7 @@
 
 <script>
 import ItemsPanel from "@/components/primitives/panels/ItemsPanel";
+
 export default {
   components: {ItemsPanel},
   props: {

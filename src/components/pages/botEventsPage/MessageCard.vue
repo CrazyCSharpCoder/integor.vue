@@ -1,7 +1,7 @@
 <template>
   <section class="message-card">
     <div class="message-meta">
-      <div class="message-meta-group chat">
+      <div v-if="!options?.hideChat" class="message-meta-group chat">
         <div class="message-meta-field meta-group-title">Чат</div>
         <div class="message-meta-field chat-primary-info">
           <div class="chat-id">Id: {{chat.id}}</div>
@@ -12,7 +12,15 @@
           <div class="chat-title">{{chat.title}}</div>
         </div>
         <div class="message-meta-options">
-          <button class="open-chat">Перейти к чату</button>
+          <router-link :to="{
+            name: $routeNames.botEvents,
+            params: {
+              page: 1
+            },
+            query: {
+              chatId: chat.id
+            }
+          }" class="open-chat">Перейти к чату</router-link>
         </div>
       </div>
 
@@ -22,8 +30,8 @@
         </div>
         <div class="message-meta-field sender-primary-info">
           <div v-if="from" class="sender-name">
-            {{from.first_name}}
-            <template v-if="from.last_name">{{from.last_name}}</template>
+            {{from.firstName}}
+            <template v-if="from.last_name">{{from.lastName}}</template>
           </div>
           <div v-if="from.is_bot" class="sender-bot">Бот</div>
         </div>
@@ -35,7 +43,7 @@
     </div>
     <div class="message">
       <div class="message-info">
-        <div class="message-id">Id сообщения: {{item.message_id}}</div>
+        <div class="message-id">Id сообщения: {{item.messageId}}</div>
         <div class="message-time">Время: {{item.date}}</div>
       </div>
       <div class="message-text">{{item.text}}</div>
@@ -49,7 +57,8 @@ export default {
     item: {
       required: true,
       type: Object
-    }
+    },
+    options: Object
   },
   data() {
     return {
@@ -88,7 +97,6 @@ $grouped-items-padding: $padding-step-small;
 
   overflow: hidden;
 
-  flex-basis: 400px;
   flex-grow: 0;
   flex-shrink: 0;
 
@@ -98,7 +106,7 @@ $grouped-items-padding: $padding-step-small;
     gap: $grouped-items-padding;
 
     overflow: hidden;
-    flex: 0 0 50%;
+    width: 200px;
 
     .meta-group-title {
       font-weight: bold;
@@ -130,6 +138,9 @@ $grouped-items-padding: $padding-step-small;
     padding: $padding-step-small;
 
     height: 100%;
+
+    font-size: 12px;
+    color: rgba($color-3-text, 0.8);
   }
 }
 
@@ -157,7 +168,8 @@ $grouped-items-padding: $padding-step-small;
     }
   }
   .open-chat {
-    @include button($color-2, $color-2-text)
+    @include button($color-2, $color-2-text);
+    width: fit-content;
   }
 }
 

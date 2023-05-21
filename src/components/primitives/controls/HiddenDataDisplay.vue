@@ -59,6 +59,9 @@ export default {
 
     flex-grow: 1;
 
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     &.hidden {
       background: $color-4; // TODO color from palette
     }

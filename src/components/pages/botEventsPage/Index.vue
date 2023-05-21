@@ -21,8 +21,13 @@
                            :enable-controls="true"
       >
         <template #controls>
-          <router-link :to="{name: $routeNames.botInfo, params: {botId, page: 1}}"
-                       class="user-action">
+          <router-link :to="{
+            name: $routeNames.botInfo,
+            params: {botId, page: 1},
+            query: Object.fromEntries(
+                Object.entries(filter).filter(entry => entry[1] !== undefined)
+            )
+          }" class="user-action">
             В начало списка
           </router-link>
         </template>
@@ -39,11 +44,27 @@
 
 <!--      Нет ошибок, есть события-->
       <template v-else>
+        <integor-extra-header>
+          <page-adjusted-content>
+            <closed-gaps-panel
+                :default-element="{
+                  component: allChatsGapComponent,
+                  data: {
+                    botId
+                  }
+                }"
+                :item-component="chatGapComponent"
+                :close-gap-event="$appEvents.botEvents.chatGapClosed"
+                :items="recentChats"
+            />
+          </page-adjusted-content>
+        </integor-extra-header>
         <div class="bot-events-page-content">
           <items-list v-if="messages"
                       :item-component="itemComponent"
                       :items="messages"
                       separator-color="#D9D9D9"
+                      :options="{hideChat: Boolean(filter.chatId)}"
           />
         </div>
         <div v-if="pagesCount && pagesCount > 1"
@@ -51,9 +72,14 @@
         >
           <div class="pagination-background">
             <pagination-component
-                :current-page-index="pageIndex"
+                :page-component="pageComponent"
+                :dots-component="pageDotsComponent"
+
                 :pages-count="pagesCount"
-                :routeFactory="createRoute"/>
+                :current-page-index="pageIndex"
+
+                :options-factory="createPageOptions"
+            />
           </div>
         </div>
       </template>
@@ -73,16 +99,42 @@ import PaginationComponent from "@/components/primitives/PaginationComponent";
 import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
 import ErrorContainerMixin from "@/components/mixins/ErrorContainerMixin";
 import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
+import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
+import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
+import ClosedGapsPanel from "@/components/primitives/panels/StandardClosedGapsPanel";
+import ChatGap from "@/components/pages/botEventsPage/chatsPanel/ChatGap";
+import AllChatsGap from "@/components/pages/botEventsPage/chatsPanel/AllChatsGap";
+import BotEventsPage from "@/components/pages/botEventsPage/pagination/BotEventsPage";
+import BotEventsPageDots from "@/components/pages/botEventsPage/pagination/BotEventsPageDots"
 
 export default {
   name: "BotEventsPage",
-  components: {LoadingDisplay, InformationDisplay, PaginationComponent, ItemsList},
+  components: {
+    ClosedGapsPanel,
+    PageAdjustedContent,
+    IntegorExtraHeader,
+    LoadingDisplay,
+    InformationDisplay,
+    PaginationComponent,
+    ItemsList
+  },
   mixins: [
     ErrorContainerMixin
   ],
   data() {
     return {
-      itemComponent: shallowRef(MessageCard)
+      itemComponent: shallowRef(MessageCard),
+
+      allChatsGapComponent: shallowRef(AllChatsGap),
+      chatGapComponent: shallowRef(ChatGap),
+
+      pageComponent: shallowRef(BotEventsPage),
+      pageDotsComponent: shallowRef(BotEventsPageDots),
+
+      filter: {
+        chatId: undefined
+      },
+      recentChats: []
     }
   },
   computed: {
@@ -92,82 +144,130 @@ export default {
     botId() {
       return this.$route.params.botId
     },
+    chatId() {
+      return this.$route.query.chatId
+    },
     ...mapGetters({
       bot: 'botEvents/bot',
       pagesCount: 'botEvents/pagesCount',
       totalEvents: 'botEvents/totalEvents',
-      messages: 'botEvents/messages'
+      messages: 'botEvents/messages',
+      appliedFilter: 'botEvents/filter'
     })
   },
   methods: {
-    createRoute(pageIndex) {
+    createPageOptions() {
       return {
-        name: this.$routeNames.botInfo,
-        params : {
-          page: pageIndex + 1
-        }
+        botId: this.botId,
+        filter: this.appliedFilter
       }
     },
-    validatePageIndex(pageIndex) {
-      // В случаях, когда у ботов отсутствуют события, единственный возможный
-      // вариант pageIndex == 0. Если убрать это условие, то следующее условие
-      // (возле return), вернёт false, так как ложной будет его вторая часть
-      if (pageIndex == 0)
-        return true
+    async handleServerError(error) {
+      console.log(error.responseBody)
 
-      return pageIndex >= 0 && pageIndex < this.$store.getters['botEvents/pagesCount']
+      this.errors.nonExistentBot = Boolean(
+          error.responseBody.errors.find(bodyError => bodyError.key == 'botId')
+      )
+
+      this.errors.wrongPageIndex = Boolean(
+          error.responseBody.errors.find(bodyError => bodyError.key == 'startIndex')
+      )
+
+      return this.errors.nonExistentBot || this.errors.wrongPageIndex
     },
-    async refreshData(botId, pageIndex) {
+    async refreshData(botId, pageIndex, filter) {
       // TODO wrong page id
       // TODO handle wrong bot id
 
-      this.errors.nonExistentBot = false
+      this.errors = {}
       await this.discard()
 
       try {
-        await this.loadBot(botId)
+        await this.load({
+          botId,
+          pageIndex,
+          filter
+        })
       }
       catch (error) {
-        if (!(error instanceof ServerError) && error.statusCode != 404)
-          throw error;
+        let errorHandlingResult = false
 
-        this.errors.nonExistentBot = true
-        return
+        if (error instanceof ServerError && error.statusCode == 400)
+          errorHandlingResult = this.handleServerError(error)
+
+        if (errorHandlingResult)
+          return
+
+        throw error
       }
-
-      // TODO after using my libraries rewrite logic
-      this.errors.wrongPageIndex = !this.validatePageIndex(pageIndex)
-
-      if (this.errors.wrongPageIndex) {
-        this.discard()
-        return
+    },
+    getRouteFilterData() {
+      return {
+        chatId: this.$route.query.chatId
       }
+    },
+    getRecentChat(id) {
+      return this.recentChats.find(chatInfo => chatInfo.chat.id == id)
+    },
+    async removeRecentChat(id) {
+      const chatIndex = this.getRecentChat(id)
 
-      await this.load( {
-        botId: this.botId,
-        pageIndex: pageIndex
-      })
+      if (chatIndex == -1)
+        return
+
+      this.recentChats.splice(chatIndex, 1)
+
+      if(this.chatId == id)
+        await this.$router.push({
+          ...this.$route,
+          query: {}
+        })
     },
     ...mapActions({
       discard: 'botEvents/discard',
-      loadBot: 'botEvents/loadBot',
-      load: 'botEvents/loadAll'
+      load: 'botEvents/load'
     })
   },
   watch: {
     // eslint-disable-next-line no-unused-vars
     async $route(to, from) {
-      if (to.name != this.$routeNames.botInfo)
+      if (to.name != this.$routeNames.botEvents)
         return
 
+      this.filter = this.getRouteFilterData()
+
       await this.discard()
-      await this.refreshData(this.botId, this.pageIndex)
+      await this.refreshData(this.botId, this.pageIndex, this.filter)
 
       window.scrollTo(0, 0)
+    },
+    appliedFilter(newFilter) {
+      if (!newFilter.chat)
+        return;
+
+      if (this.getRecentChat(newFilter.chat.id))
+        return
+
+      const recentChats = this.recentChats
+
+      recentChats.unshift({
+        botId: this.botId,
+        chat: newFilter.chat,
+        filter: this.appliedFilter
+      })
+
+      if (recentChats.length > this.$appConfiguration.botEvents.maxRecentChats)
+        recentChats.pop()
     }
   },
   async created() {
-    await this.refreshData(this.botId, this.pageIndex)
+    this.$emitter.on(this.$appEvents.botEvents.chatGapClosed, this.removeRecentChat)
+
+    this.filter = this.getRouteFilterData()
+    await this.refreshData(this.botId, this.pageIndex, this.filter)
+  },
+  unmounted() {
+    this.$emitter.off(this.$appEvents.botEvents.chatGapClosed)
   }
 }
 </script>

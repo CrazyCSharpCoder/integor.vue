@@ -1,16 +1,13 @@
 <template>
   <ul class="pagination">
     <li v-for="pageIndex in pageIndices" :key="pageIndex"
-        :class="['page', {selected: pageIndex == currentPageIndex, dots: isDots(pageIndex)}]"
+        class="page-container"
     >
-      <template v-if="!isDots(pageIndex)">
-        <router-link v-if="routeFactory" :to="routeFactory(pageIndex)" class="select-page">
-          {{indexToPageNumber(pageIndex)}}
-        </router-link>
-        <button v-else @click="broadcastPageSelected(pageIndex)" class="select-page">
-          {{indexToPageNumber(pageIndex)}}
-        </button>
-      </template>
+      <component v-if="isDots(pageIndex)" :is="dotsComponent"/>
+      <component v-else
+                 :is="pageComponent"
+                 :pageIndex="pageIndex"
+                 :options="optionsFactory ? optionsFactory(pageIndex) : undefined"/>
     </li>
   </ul>
 </template>
@@ -24,6 +21,17 @@ function getEndPageIndex(pagesCount) {
 
 export default {
   props: {
+    dotsComponent: {
+      required: true,
+      type: Object
+    },
+    pageComponent: {
+      required: true,
+      type: Object,
+    },
+
+    optionsFactory: Function,
+
     pagesCount: {
       required: true,
       type: Number
@@ -35,9 +43,7 @@ export default {
     pagesFromCurrent: {
       default: 2,
       type: Number
-    },
-    routeFactory: Function,
-    pageSelectedEvent: String
+    }
   },
   data() {
     return {
@@ -77,17 +83,12 @@ export default {
 
       result.push(this.endPageIndex)
 
+      console.log(result)
+
       return result
     }
   },
   methods: {
-    broadcastPageSelected(pageIndex) {
-      this.$emitter.emit(this.pageSelectedEvent, pageIndex)
-    },
-    indexToPageNumber(index) {
-      // Индексация начинается с 0, а нумерация страниц - с 1
-      return index + 1
-    },
     isDots(pageIndex) {
       return pageIndex === undefined
     }
@@ -103,10 +104,8 @@ export default {
 
 <style scoped lang="scss">
 
-@import "/src/assets/scss/palette";
 @import "/src/assets/scss/contentAdjustment";
 @import "/src/assets/scss/controls/panels";
-@import "/src/assets/scss/controls/buttons";
 
 $page-width: 36px;
 $page-height: 36px;
@@ -118,36 +117,11 @@ $page-height: 36px;
   justify-content: center;
   align-items: stretch;
   gap: $padding-step-small;
-}
 
-.page {
-  user-select: none;
-
-  width: $page-width;
-  text-align: center;
-  line-height: $page-height;
-
-  .select-page {
-    @include button;
-    padding: 0;
-  }
-
-  &.selected {
-    .select-page {
-      @include button($color-1, $color-1-text);
-      padding: 0;
-    }
-  }
-
-  &.dots {
-    &::before {
-      content: '...';
-      font-weight: bold;
-    }
+  > .page-container {
+    width: $page-width;
+    line-height: $page-height;
   }
 }
-
-
-
 
 </style>

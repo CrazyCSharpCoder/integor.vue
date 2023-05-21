@@ -28,7 +28,7 @@ async function handle(url, params, asJson = true) {
         throw new ServerError(
             'Server returned an error',
             response.status,
-            response.body)
+            await response.json())
     }
 
     if (asJson)

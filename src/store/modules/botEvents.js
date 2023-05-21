@@ -9,7 +9,9 @@ export default {
         return {
             bot: undefined,
             totalEvents: undefined,
-            messages: undefined
+            filteredEvents: undefined,
+            messages: undefined,
+            filter: undefined
         }
     },
     getters: {
@@ -23,19 +25,25 @@ export default {
             return state.messages
         },
         pagesCount(state) {
-            if (!state.totalEvents)
+            if (!state.filteredEvents)
                 return undefined
 
-            return Math.ceil(state.totalEvents / pageSize)
+            return Math.ceil(state.filteredEvents / pageSize)
+        },
+        filter(state) {
+            return state.filter
         }
     },
     mutations: {
-        SET_EVENTS(state, {messages}) {
-            state.messages = messages
-        },
-        SET_BOT_INFO(state, {bot, totalEvents}) {
+        SET_INFO(state, {bot, totalEvents, filteredEvents, messages, filter}) {
             state.bot = bot
+
             state.totalEvents = totalEvents
+            state.filteredEvents = filteredEvents
+
+            state.messages = messages
+
+            state.filter = filter
         },
         DISCARD(state) {
             state.bot = state.totalEvents = state.messages = undefined
@@ -45,31 +53,25 @@ export default {
         discard({commit}) {
             commit('DISCARD')
         },
-        async loadAll({commit}, {botId, pageIndex}) {
+        async load({commit}, {botId, pageIndex, filter}) {
             const startIndex = pageIndex * pageSize
 
-            const botEventsInfo = await api.botEvents.getEvents(
-                botId, startIndex, pageSize
+            filter = Object.fromEntries(
+                Object.entries(filter).filter(entry => entry[1] !== undefined)
             )
-            commit('SET_BOT_INFO', {
+
+            const botEventsInfo = await api.botEvents.getEvents(
+                botId, startIndex, pageSize, filter
+            )
+            commit('SET_INFO', {
                 bot: botEventsInfo.bot,
-                totalEvents: botEventsInfo.total_events
-            })
-            commit('SET_EVENTS', {
-                messages: botEventsInfo.messages
+                totalEvents: botEventsInfo.totalEvents,
+                filteredEvents: botEventsInfo.filteredEvents,
+                messages: botEventsInfo.messages,
+                filter: botEventsInfo.filter
             })
 
             return botEventsInfo
-        },
-        async loadBot({commit}, botId) {
-            const botInfo = await api.bots.getBot(botId)
-
-            commit('SET_BOT_INFO', {
-                bot: botInfo.bot,
-                totalEvents: botInfo.total_events}
-            )
-
-            return botInfo
         }
     }
 }
