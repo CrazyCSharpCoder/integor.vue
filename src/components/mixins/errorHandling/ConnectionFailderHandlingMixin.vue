@@ -1,4 +1,13 @@
 <script>
+
+function showError() {
+  this.hasConnectionFailedError = true
+}
+
+function hideError() {
+  this.hasConnectionFailedError = false
+}
+
 export default function (
     connectionFailedEvent,
     connectionRestoredEvent
@@ -9,17 +18,9 @@ export default function (
         hasConnectionFailedError: false
       }
     },
-    methods: {
-      showError() {
-        this.hasConnectionFailedError = true
-      },
-      hideError() {
-        this.hasConnectionFailedError = false
-      }
-    },
     created() {
-      this.$emitter.on(connectionFailedEvent, this.showError)
-      this.$emitter.on(connectionRestoredEvent, this.hideError)
+      this.$emitter.on(connectionFailedEvent, showError.bind(this))
+      this.$emitter.on(connectionRestoredEvent, hideError.bind(this))
     },
     unmounted() {
       this.$emitter.off(connectionFailedEvent)

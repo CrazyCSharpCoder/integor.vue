@@ -12,12 +12,30 @@
 </template>
 
 <script>
-import {ConnectionFailedError} from "@/errorHandling/serverErrors";
+import {ServerError, ConnectionFailedError} from "@/errorHandling/serverErrors";
 
 import HeaderedModalWindow from "@/components/primitives/modalWindow/HeaderedModalWindow";
 import ModalWindowMixin from "@/components/primitives/modalWindow/common/ModalWindowMixin";
 import AddBotForm from "@/components/pages/myBotsPage/AddBotForm";
 import ErrorHandlerMixin from "@/components/mixins/ErrorHandlerMixin";
+
+function getErrorMessage(error) {
+  if (error instanceof ConnectionFailedError) {
+    return 'Не удалось установить соединение с сервером'
+  }
+
+  if (error instanceof ServerError) {
+    const firstError = error.responseBody.errors[0]
+    let errorMessage = firstError.message ?? firstError.messages[0]
+
+    if (firstError.key)
+      errorMessage = firstError.key + ': ' + errorMessage
+
+    return errorMessage
+  }
+
+  return 'Произошла ошибка'
+}
 
 export default {
   components: {AddBotForm, HeaderedModalWindow},
@@ -31,12 +49,11 @@ export default {
         await this.$store.dispatch('addBot', bot)
       }
       catch (error) {
-        if (error instanceof ConnectionFailedError) {
-          this.setTheError('Не удалось установить соединение с сервером')
-          return
-        }
+        this.setTheError(
+            getErrorMessage(error)
+        )
 
-        throw error
+        return
       }
       this.close()
     },

@@ -9,7 +9,7 @@
         </div>
         <slot v-else name="image">
           <div class="error-image">
-            <img :src="require('@/assets/icons/error-default-image.svg')"
+            <img :src="require('@/assets/icons/errors/error-default-image.svg')"
                  :alt="imageAlt"
                  class="illustration"/>
           </div>
@@ -21,13 +21,13 @@
         </div>
         <slot v-else name="title"></slot>
       </div>
-      <div class="description-container">
+      <div v-if="$slots.description || description" class="description-container">
         <div v-if="description" class="error-description">
           {{description}}
         </div>
         <slot v-else name="description"></slot>
       </div>
-      <div v-if="enableControls" class="controls">
+      <div v-if="$slots.controls" class="controls">
         <slot name="controls"></slot>
       </div>
     </div>

@@ -3,6 +3,7 @@ import routeNames from "@/router/routeNames";
 import IntegorLayoutPage from "@/components/pages/IntegorLayoutPage";
 import MyBotsPage from "@/components/pages/myBotsPage/Index";
 import BotEventsPage from '@/components/pages/botEventsPage/Index'
+import NotFoundPage from "@/components/pages/NotFoundPage";
 
 export default [
     {
@@ -22,4 +23,9 @@ export default [
             }
         ]
     },
+    {
+        path: '/:catchAll(.*)',
+        name: routeNames.notFound,
+        component: NotFoundPage
+    }
 ]

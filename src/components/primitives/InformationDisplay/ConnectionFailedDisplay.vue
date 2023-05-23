@@ -3,7 +3,7 @@
       title="Не удалось установить соединение с сервером"
       description="Возможно, на сервере возникли неполадки, или
       у вас плохое качество соединения. Зайдите позже"
-      :image-ref="require('@/assets/icons/connection-failed.svg')"
+      :image-ref="require('@/assets/icons/errors/connection-failed.svg')"
   />
 </template>
 
