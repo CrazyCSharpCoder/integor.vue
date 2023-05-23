@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+//import errorHandler from "@/helpers/errorHandler";
+
 import router from "@/router";
 import store from "@/store";
 import routeNames from "@/plugins/routeNames";
@@ -29,5 +31,7 @@ const plugins = [
 
 for (let plugin of plugins)
     app.use(plugin)
+
+//app.config.errorHandler = errorHandler
 
 app.mount('#app')

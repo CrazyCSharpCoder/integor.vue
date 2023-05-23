@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import {ConnectionFailedError} from "@/errorHandling/serverErrors";
+
 import HeaderedModalWindow from "@/components/primitives/modalWindow/HeaderedModalWindow";
 import ModalWindowMixin from "@/components/primitives/modalWindow/common/ModalWindowMixin";
 import AddBotForm from "@/components/pages/myBotsPage/AddBotForm";
@@ -25,7 +27,17 @@ export default {
   ],
   methods: {
     async addBot(bot) {
-      await this.$store.dispatch('addBot', bot)
+      try {
+        await this.$store.dispatch('addBot', bot)
+      }
+      catch (error) {
+        if (error instanceof ConnectionFailedError) {
+          this.setTheError('Не удалось установить соединение с сервером')
+          return
+        }
+
+        throw error
+      }
       this.close()
     },
     dispose() {

@@ -1,4 +1,5 @@
 @import "./media";
+@import "../contentAdjustment";
 
 %link-reset {
   text-decoration: none;
@@ -16,7 +17,9 @@
   font-size: inherit;
 }
 
-@mixin button($background, $color) {
+@mixin button(
+  $background: $color-2, $color: $color-2-text,
+  $focus-background: $color-5, $focus-color: $color-5-text) {
   @extend %link-reset;
   @extend %button-reset;
 
@@ -26,6 +29,11 @@
 
   display: block;
   cursor: pointer;
+
+  &:hover, &:focus {
+    background: $focus-background;
+    color: $focus-color;
+  }
 }
 
 @mixin icon-button($icon-url, $icon-size) {

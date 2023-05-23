@@ -31,7 +31,6 @@ export default {
 
             if (!getters['myBots'])
                 commit('SET_MY_BOTS', [addedBot])
-
             else
                 commit('APPEND_BOT', addedBot)
 

@@ -114,7 +114,7 @@ export default {
         @include input($color-2, $color-5);
         width: 100%;
 
-        &.error {
+        &.information {
           @extend %error-input;
         }
       }
@@ -131,6 +131,11 @@ export default {
       @include button($color-5, $color-5-text);
       width: 100%;
     }
+  }
+
+  .form-error {
+    @extend %form-error;
+    text-align: center;
   }
 }
 

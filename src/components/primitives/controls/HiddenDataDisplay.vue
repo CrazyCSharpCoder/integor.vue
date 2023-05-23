@@ -59,12 +59,15 @@ export default {
 
     flex-grow: 1;
 
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     &.hidden {
       background: $color-4; // TODO color from palette
     }
   }
   .show-button {
-    @include button($color-1, $color-1-text);
+    @include button($color-1, $color-1-text, $color-5, $color-5-text);
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
 

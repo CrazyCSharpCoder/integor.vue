@@ -1,5 +1,5 @@
 export default {
-    domain: 'http://localhost:5116/',
+    domain: 'http://localhost:5083/',
 
     methods: {
         get: 'GET',

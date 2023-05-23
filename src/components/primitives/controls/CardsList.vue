@@ -1,7 +1,8 @@
 <template>
   <ul class="cards-list">
-    <li class="cards-list-item" v-for="item in items" :key="$generateKey(item)">
-      <component :is="cardComponent" :item="item"/>
+    <li v-for="item in items" :key="$generateKey(item)"
+        class="cards-list-item">
+      <component :is="cardComponent" :item="item" :options="options"/>
     </li>
   </ul>
 </template>
@@ -16,7 +17,8 @@ export default {
     items: {
       required: true,
       type: Array
-    }
+    },
+    options: Object
   }
 }
 </script>
@@ -41,16 +43,13 @@ export default {
 
     flex-grow: 0;
     flex-shrink: 0;
+    overflow: hidden;
     
     @media (max-width: $large-threshold) {
-      flex-basis: 50%
-    }
-
-    @media (max-width: $medium-threshold) {
       flex-basis: 100%
     }
 
-    flex-basis: 33%
+    flex-basis: 50%
   }
 }
 

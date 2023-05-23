@@ -1,21 +1,34 @@
-import ServerError from '@/errorHandling/serverError'
+import {ServerError, ConnectionFailedError} from '@/errorHandling/serverErrors'
 
-async function handle(url, method = 'GET', body = undefined, asJson = true) {
-    const config = {method}
+function appendQuery(url, queryParams) {
+    return url + '?' + new URLSearchParams(queryParams)
+}
 
-    if (body) {
-        config.body = JSON.stringify(body)
+async function handle(url, params, asJson = true) {
+    const config = {method: params?.method ?? 'GET'}
+
+    if (params?.body) {
+        config.body = JSON.stringify(params.body)
         config.headers = {
             "Content-Type": "application/json"
         }
     }
 
-    const response = await fetch(url, config)
+    if (params?.queryParams && Object.keys(params.queryParams).length)
+        url = appendQuery(url, params.queryParams)
+
+    try {
+        var response = await fetch(url, config)
+    }
+    catch {
+        throw new ConnectionFailedError('Could not connect to the server')
+    }
 
     if (!response.ok) {
         throw new ServerError(
             'Server returned an error',
-            response.body)
+            response.status,
+            await response.json())
     }
 
     if (asJson)

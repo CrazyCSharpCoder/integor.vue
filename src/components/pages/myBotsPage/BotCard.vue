@@ -3,7 +3,7 @@
     <div class="bot-card-header">
       <div class="bot-title">{{item.bot.title}}</div>
 <!--      TODO correct notation-->
-      <div class="bot-event-count"><b>{{item.total_events}}</b> событий</div>
+      <div class="bot-event-count"><b>{{item.totalEvents}}</b> событий</div>
     </div>
     <div class="bot-token">
       <hidden-data-display :data="item.bot.token" placeholder="Токен бота"/>
@@ -11,8 +11,11 @@
     <ul class="bot-card-controls">
       <li class="bot-card-controls-item">
         <router-link :to="{
-          name: $routeNames.botInfo,
-          params: {botId: item.bot.id}
+          name: $routeNames.botEvents,
+          params: {
+            botId: item.bot.id,
+            page: 1
+          }
         }" class="open-bot">Перейти</router-link>
       </li>
       <li class="bot-card-controls-item">
@@ -83,11 +86,11 @@ $separation-border: 1px solid $color-4;
   }
 
   .open-bot {
-    @include button($color-5, $color-5-text);
+    @include button;
   }
 
   .delete-bot {
-    @include button($color-1, $color-1-text);
+    @include button($color-1, $color-1-text, $color-2, $color-2-text);
   }
 }
 
