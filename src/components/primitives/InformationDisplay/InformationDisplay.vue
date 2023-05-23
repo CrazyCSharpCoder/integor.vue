@@ -21,13 +21,13 @@
         </div>
         <slot v-else name="title"></slot>
       </div>
-      <div class="description-container">
+      <div v-if="$slots.description || description" class="description-container">
         <div v-if="description" class="error-description">
           {{description}}
         </div>
         <slot v-else name="description"></slot>
       </div>
-      <div v-if="enableControls" class="controls">
+      <div v-if="$slots.controls" class="controls">
         <slot name="controls"></slot>
       </div>
     </div>

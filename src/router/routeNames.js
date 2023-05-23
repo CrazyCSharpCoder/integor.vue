@@ -1,4 +1,5 @@
 export default {
     bots: 'Bots',
-    botEvents: 'BotEvents'
+    botEvents: 'BotEvents',
+    notFound: 'notFound'
 }

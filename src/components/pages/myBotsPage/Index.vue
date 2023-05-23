@@ -15,7 +15,6 @@
                            :image-ref="require('@/assets/icons/empty-result.svg')"
                            title="У вас не добавлено ни одного бота"
                            description="Давайте добавим вашего первого бота прямо сейчас!"
-                           :enable-controls="true"
       >
         <template #controls>
           <button @click="openAddBotModalWindow" class="add-bot">Добавить бота</button>

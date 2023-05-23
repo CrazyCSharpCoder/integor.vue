@@ -4,7 +4,6 @@
     <template v-else>
       <information-display v-if="errors.nonExistentBot"
                            title="Не существует бота с указанными данными"
-                           :enable-controls="true"
       >
         <template #controls>
           <router-link :to="{name: $routeNames.bots}"
