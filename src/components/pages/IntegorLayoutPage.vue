@@ -10,6 +10,7 @@
   </integor-header>
   <main class="main">
     <connection-failed-display v-if="hasConnectionFailedError"/>
+    <server-error-display v-else-if="hasServerError" :server-error="serverError"/>
     <router-view v-else></router-view>
   </main>
   <integor-footer>
@@ -27,13 +28,16 @@ import {shallowRef} from "vue";
 import appEvents from "@/helpers/appEvents";
 import routeNames from "@/router/routeNames";
 
+import ConnectionFailderHandlingMixin from '@/components/mixins/errorHandling/ConnectionFailderHandlingMixin'
+import ServerErrorHandlingMixin from '@/components/mixins/errorHandling/ServerErrorHandlingMixin'
+
 import IntegorHeader from "@/components/primitives/IntegorHeader";
 import IntegorFooter from "@/components/primitives/IntegorFooter";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import NavigationPanel from "@/components/primitives/panels/NavigationPanel";
 import NavigationItem from "@/components/primitives/special/HeaderNavItem";
-import ConnectionFailderHandlingMixin from '@/components/mixins/ConnectionFailderHandlingMixin'
 import ConnectionFailedDisplay from "@/components/primitives/InformationDisplay/ConnectionFailedDisplay";
+import ServerErrorDisplay from "@/components/primitives/InformationDisplay/ServerErrorDisplay";
 
 const navigationItems = [
   {
@@ -43,11 +47,17 @@ const navigationItems = [
 ]
 
 export default {
-  components: {ConnectionFailedDisplay, NavigationPanel, PageAdjustedContent, IntegorFooter, IntegorHeader},
+  components: {
+    ServerErrorDisplay,
+    ConnectionFailedDisplay, NavigationPanel, PageAdjustedContent, IntegorFooter, IntegorHeader},
   mixins: [
       ConnectionFailderHandlingMixin(
           appEvents.connection.connectionFailedError,
           appEvents.connection.connectionRestoredError
+      ),
+      ServerErrorHandlingMixin(
+          appEvents.errors.serverError,
+          appEvents.errors.discardServerError
       )
   ],
   data() {

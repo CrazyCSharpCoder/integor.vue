@@ -9,7 +9,7 @@
         </div>
         <slot v-else name="image">
           <div class="error-image">
-            <img :src="require('@/assets/icons/error-default-image.svg')"
+            <img :src="require('@/assets/icons/errors/error-default-image.svg')"
                  :alt="imageAlt"
                  class="illustration"/>
           </div>

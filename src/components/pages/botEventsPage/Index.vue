@@ -200,6 +200,12 @@ export default {
 
         throw error
       }
+
+        await this.load({
+          botId,
+          pageIndex,
+          filter
+        })
     },
     getRouteFilterData() {
       return {
