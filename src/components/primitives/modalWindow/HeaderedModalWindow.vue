@@ -5,7 +5,7 @@
         <div class="header-content-container">
           <slot name="header"></slot>
         </div>
-        <div class="close-button-container">
+        <div v-if="onCloseClicked" class="close-button-container">
           <button @click="onClosed" class="close-button"></button>
         </div>
       </div>
@@ -22,9 +22,7 @@ import ModalWindowTemplate from "@/components/primitives/modalWindow/ModalWindow
 export default {
   components: {ModalWindowTemplate},
   props: {
-    onCloseClicked: {
-      type: String,
-    },
+    onCloseClicked: String,
     active: {
       type: Boolean,
       default: false
@@ -52,13 +50,13 @@ $close-button-size: 32px;
   background: $color-4;
   color: $color-4-text;
 
+  overflow: hidden;
+
   .modal-window-header {
     background: $color-1;
     color: $color-1-text;
     display: flex;
     align-items: stretch;
-
-    padding: 0 $padding-step;
 
     .header-content-container {
       font-size: $h2-font-size;
@@ -74,7 +72,7 @@ $close-button-size: 32px;
     }
 
     .header-content-container, .close-button-container {
-      padding: $padding-step-small $padding-step;
+      padding: $modal-window-vertical-gap $modal-window-horizontal-gap;
     }
   }
 

@@ -3,7 +3,7 @@
     <template #header>Добавить Telegram бота</template>
     <template #default>
       <div v-if="isActive" class="add-bot-form-container">
-        <add-bot-form
+        <input-bot-form
             :submit-event="$appEvents.bots.submitAddBot"
             :form-error="theError"/>
       </div>
@@ -12,33 +12,13 @@
 </template>
 
 <script>
-import {ServerError, ConnectionFailedError} from "@/errorHandling/serverErrors";
-
 import HeaderedModalWindow from "@/components/primitives/modalWindow/HeaderedModalWindow";
-import ModalWindowMixin from "@/components/primitives/modalWindow/common/ModalWindowMixin";
-import AddBotForm from "@/components/pages/myBotsPage/AddBotForm";
+import ModalWindowMixin from "@/components/primitives/modalWindow/ModalWindowMixin";
+import InputBotForm from "@/components/pages/myBotsPage/InputBotForm";
 import ErrorHandlerMixin from "@/components/mixins/ErrorHandlerMixin";
 
-function getErrorMessage(error) {
-  if (error instanceof ConnectionFailedError) {
-    return 'Не удалось установить соединение с сервером'
-  }
-
-  if (error instanceof ServerError) {
-    const firstError = error.responseBody.errors[0]
-    let errorMessage = firstError.message ?? firstError.messages[0]
-
-    if (firstError.key)
-      errorMessage = firstError.key + ': ' + errorMessage
-
-    return errorMessage
-  }
-
-  return 'Произошла ошибка'
-}
-
 export default {
-  components: {AddBotForm, HeaderedModalWindow},
+  components: {InputBotForm, HeaderedModalWindow},
   mixins: [
       ModalWindowMixin,
       ErrorHandlerMixin
@@ -50,9 +30,8 @@ export default {
       }
       catch (error) {
         this.setTheError(
-            getErrorMessage(error)
+            this.createErrorMessage(error)
         )
-
         return
       }
       this.close()
@@ -72,13 +51,18 @@ export default {
   },
   unmounted() {
     this.$emitter.off(this.$appEvents.bots.submitAddBot)
+    this.$emitter.off(this.$appEvents.bots.openAddBotModalWindow)
+    this.$emitter.off(this.$appEvents.bots.closeAddBotModalWindow)
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+@import "/src/assets/scss/contentAdjustment";
 
 .add-bot-form-container {
+  padding: $modal-window-vertical-gap $modal-window-horizontal-gap;
   width: 360px;
 }
 

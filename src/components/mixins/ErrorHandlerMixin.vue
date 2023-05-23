@@ -1,4 +1,6 @@
 <script>
+import {ConnectionFailedError, ServerError} from "@/errorHandling/serverErrors";
+
 export default {
   data() {
     return {
@@ -44,6 +46,23 @@ export default {
       let constraintMsg = Object.values(message.constraints)[0]
 
       this.setTheError(`${propName}: ${constraintMsg}`)
+    },
+    createErrorMessage(error) {
+      if (error instanceof ConnectionFailedError) {
+        return 'Не удалось установить соединение с сервером'
+      }
+
+      if (error instanceof ServerError) {
+        const firstError = error.responseBody.errors[0]
+        let errorMessage = firstError.message ?? firstError.messages[0]
+
+        if (firstError.key)
+          errorMessage = firstError.key + ': ' + errorMessage
+
+        return errorMessage
+      }
+
+      return 'Произошла ошибка'
     }
   }
 }

@@ -162,8 +162,6 @@ export default {
       }
     },
     async handleServerError(error) {
-      console.log(error.responseBody)
-
       this.errors.nonExistentBot = Boolean(
           error.responseBody.errors.find(bodyError => bodyError.key == 'botId')
       )

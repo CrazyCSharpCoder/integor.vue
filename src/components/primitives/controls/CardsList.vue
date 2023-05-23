@@ -2,7 +2,10 @@
   <ul class="cards-list">
     <li v-for="item in items" :key="$generateKey(item)"
         class="cards-list-item">
-      <component :is="cardComponent" :item="item" :options="options"/>
+      <component
+          :is="cardComponent"
+          :item="item"
+          :options="Boolean(optionsFactory) ? optionsFactory(item) : undefined"/>
     </li>
   </ul>
 </template>
@@ -18,7 +21,7 @@ export default {
       required: true,
       type: Array
     },
-    options: Object
+    optionsFactory: Function
   }
 }
 </script>

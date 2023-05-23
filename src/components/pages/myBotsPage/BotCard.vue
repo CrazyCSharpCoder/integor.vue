@@ -1,27 +1,38 @@
 <template>
   <section class="bot-card">
     <div class="bot-card-header">
-      <div class="bot-title">{{item.bot.title}}</div>
+      <div class="bot-title">{{bot.title}}</div>
 <!--      TODO correct notation-->
       <div class="bot-event-count"><b>{{item.totalEvents}}</b> событий</div>
     </div>
     <div class="bot-token">
-      <hidden-data-display :data="item.bot.token" placeholder="Токен бота"/>
+      <hidden-data-display :data="bot.token" placeholder="Токен бота"/>
     </div>
     <ul class="bot-card-controls">
       <li class="bot-card-controls-item">
         <router-link :to="{
           name: $routeNames.botEvents,
           params: {
-            botId: item.bot.id,
+            botId: bot.id,
             page: 1
           }
         }" class="open-bot">Перейти</router-link>
       </li>
-      <li class="bot-card-controls-item">
-<!--        TODO add handler-->
-        <button class="delete-bot">В ахрив</button>
-      </li>
+
+      <template v-if="!bot.isArchived">
+        <li v-if="options?.updateBotEvent" class="bot-card-controls-item">
+          <button @click="onUpdate" class="update-bot">Обновить</button>
+        </li>
+        <li v-if="options?.archiveBotEvent" class="bot-card-controls-item">
+          <button @click="onArchive" class="archive-bot">В ахрив</button>
+        </li>
+      </template>
+      <template v-else>
+        <li v-if="options?.unarchiveBotEvent" class="bot-card-controls-item">
+<!--          TODO add handler-->
+          <button @click="onUnarchive" class="unarchive-bot">Разархивировать</button>
+        </li>
+      </template>
     </ul>
   </section>
 </template>
@@ -30,12 +41,28 @@
 import HiddenDataDisplay from "@/components/primitives/controls/HiddenDataDisplay";
 
 export default {
-  name: "BotListItem",
   components: {HiddenDataDisplay},
   props: {
     item: {
       type: Object,
       required: true
+    },
+    options: Object
+  },
+  computed: {
+    bot() {
+      return this.item.bot
+    }
+  },
+  methods: {
+    onUpdate() {
+      this.$emitter.emit(this.options.updateBotEvent, this.item)
+    },
+    onArchive() {
+      this.$emitter.emit(this.options.archiveBotEvent, this.item)
+    },
+    onUnarchive() {
+      this.$emitter.emit(this.options.unarchiveBotEvent, this.item)
     }
   }
 }
@@ -85,12 +112,12 @@ $separation-border: 1px solid $color-4;
     @include panel();
   }
 
-  .open-bot {
+  .open-bot, .update-bot, .unarchive-bot {
     @include button;
   }
 
-  .delete-bot {
-    @include button($color-1, $color-1-text, $color-2, $color-2-text);
+  .archive-bot {
+    @include button($color-1, $color-1-text, $color-5, $color-5-text);
   }
 }
 

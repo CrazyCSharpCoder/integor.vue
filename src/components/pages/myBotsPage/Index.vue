@@ -21,10 +21,16 @@
         </template>
       </information-display>
       <section v-else class="my-bots-page-content">
-        <cards-list :card-component="cardComponent" :items="myBots"/>
+        <cards-list
+            :card-component="cardComponent"
+            :items="myBots"
+            :options-factory="createBotCardOptions"
+        />
       </section>
     </template>
     <add-bot-modal-window/>
+    <update-bot-modal-window/>
+    <archive-bot-modal-window/>
   </div>
 </template>
 
@@ -36,13 +42,24 @@ import BotCard from "@/components/pages/myBotsPage/BotCard";
 import CardsList from "@/components/primitives/controls/CardsList";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
-import AddBotModalWindow from "@/components/pages/myBotsPage/AddBotModalWindow";
+import AddBotModalWindow from "@/components/pages/myBotsPage/modalWindows/AddBotModalWindow";
 import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
 import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
+import UpdateBotModalWindow from "@/components/pages/myBotsPage/modalWindows/UpdateBotModalWindow";
+import ArchiveBotModalWindow from "@/components/pages/myBotsPage/modalWindows/ArchiveBotModalWindow";
 
 export default {
   name: 'MyBotsPage',
-  components: {LoadingDisplay, InformationDisplay, AddBotModalWindow, PageAdjustedContent, IntegorExtraHeader, CardsList},
+  components: {
+    ArchiveBotModalWindow,
+    UpdateBotModalWindow,
+    LoadingDisplay,
+    InformationDisplay,
+    AddBotModalWindow,
+    PageAdjustedContent,
+    IntegorExtraHeader,
+    CardsList
+  },
   data() {
     return {
       cardComponent: shallowRef(BotCard)
@@ -56,6 +73,12 @@ export default {
   methods: {
     openAddBotModalWindow() {
       this.$emitter.emit(this.$appEvents.bots.openAddBotModalWindow)
+    },
+    createBotCardOptions() {
+      return {
+        updateBotEvent: this.$appEvents.bots.openUpdateBotModalWindow,
+        archiveBotEvent: this.$appEvents.bots.openArchiveBotModalWindow
+      }
     }
   },
   async created() {

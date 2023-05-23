@@ -1,10 +1,15 @@
-export default {
-    domain: 'http://localhost:5083/',
+const domain = 'http://localhost:5083/'
 
-    methods: {
-        get: 'GET',
-        post: 'POST',
-        put: 'PUT',
-        delete: 'DELETE'
-    }
+const methods = {
+    get: 'GET',
+    post: 'POST',
+    put: 'PUT',
+    delete: 'DELETE'
+}
+
+export {domain, methods}
+
+export default {
+    domain,
+    methods
 }

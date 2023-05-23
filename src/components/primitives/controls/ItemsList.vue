@@ -4,7 +4,10 @@
         :class="['items-list-item', {separator: Boolean(separatorColor)}]"
         :style="{'border-color': separatorColor ?? 'none'}"
     >
-      <component :is="itemComponent" :item="item" :options="options"/>
+      <component
+          :is="itemComponent"
+          :item="item"
+          :options="Boolean(optionsFactory) ? optionsFactory(item) : undefined"/>
     </li>
   </ul>
 </template>
@@ -20,7 +23,7 @@ export default {
       required: true,
       type: Object
     },
-    options: Object,
+    optionsFactory: Function,
     separatorColor: String
   }
 }

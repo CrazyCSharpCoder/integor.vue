@@ -18,15 +18,12 @@ export default {
   },
   computed: {
     body() {
-      console.log('body', this.serverError.responseBody)
       return this.serverError.responseBody
     },
     statusCode() {
-      console.log('statusCode', this.serverError.statusCode)
       return this.serverError.statusCode
     },
     errors() {
-      console.log('errors', this.body.errors)
       return this.body.errors
     },
 

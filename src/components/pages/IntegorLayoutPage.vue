@@ -43,6 +43,10 @@ const navigationItems = [
   {
     title: 'Мои боты',
     route: { name: routeNames.bots }
+  },
+  {
+    title: 'Архив',
+    route: {name: routeNames.archive}
   }
 ]
 

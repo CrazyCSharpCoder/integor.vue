@@ -83,8 +83,6 @@ export default {
 
       result.push(this.endPageIndex)
 
-      console.log(result)
-
       return result
     }
   },

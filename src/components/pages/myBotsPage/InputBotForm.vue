@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="submitData" class="add-bot">
+  <form @submit.prevent="submitData" class="bot-input">
     <div class="form-fields">
       <div class="form-field">
         <input v-model="input.title" type="text" placeholder="Наименование бота"
@@ -96,8 +96,7 @@ export default {
 @import "/src/assets/scss/patterns/contentAdjustment";
 @import "/src/assets/scss/patterns/forms";
 
-.add-bot {
-  padding: $padding-step-small $padding-step;
+.bot-input {
   width: 100%;
 
   .form-fields, .form-controls {
