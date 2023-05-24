@@ -108,11 +108,11 @@ export default {
 }
 
 .modal-window-controls {
-  @include panel($padding-step);
+  @include panel($padding-step-large);
   flex-direction: column;
   align-items: stretch;
 
-  border-top: 1px solid $color-3;
+  border-top: 1px solid $color-1-shade-3;
   padding-top: $modal-window-vertical-gap;
 
   .confirm, .cancel {
@@ -120,10 +120,10 @@ export default {
   }
 
   .confirm {
-    @include button($color-5, $color-5-text);
+    @include button($color-1-shade-5, $color-1-text);
   }
   .cancel {
-    @include button($color-1, $color-1-text);
+    @include button($color-1-shade-1, $color-1-text);
   }
 }
 

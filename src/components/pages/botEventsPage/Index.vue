@@ -298,7 +298,7 @@ export default {
   justify-content: center;
 
   .pagination-background {
-    background: $color-4;
+    background: $color-1-shade-4;
   }
 }
 

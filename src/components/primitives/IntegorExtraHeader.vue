@@ -15,7 +15,8 @@ export default {
 @import "/src/assets/scss/palette";
 
 .header-extra {
-  background: $color-5;
+  background: $color-2-shade-1;
+  color: $color-2-text;
 
   width: 100%;
   position: sticky;

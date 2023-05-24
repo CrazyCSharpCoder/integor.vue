@@ -52,7 +52,7 @@ export default {
   padding: 0;
 
   &.selected {
-    @include button($color-1, $color-1-text);
+    @include button($color-1-shade-1, $color-1-text);
     padding: 0;
   }
 }

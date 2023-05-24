@@ -15,7 +15,7 @@ export default {
 @import '/src/assets/scss/palette';
 
 .footer {
-  background: $color-1;
+  background: $color-1-shade-1;
   color: $color-1-text;
 }
 

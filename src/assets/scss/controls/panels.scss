@@ -4,7 +4,7 @@
   list-style: none;
 }
 
-@mixin panel($gap: $padding-step) {
+@mixin panel($gap: $padding-step-large) {
   @extend %list-reset;
 
   display: flex;

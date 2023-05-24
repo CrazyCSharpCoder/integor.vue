@@ -29,7 +29,7 @@ import {mapGetters, mapActions} from "vuex";
 
 import DisposableEventsMixin from "@/components/mixins/DisposableEventsMixin";
 
-import BotCard from "@/components/pages/myBotsPage/BotCard";
+import BotCard from "@/components/pages/myBotsPage/primitives/BotCard";
 import CardsList from "@/components/primitives/controls/CardsList";
 import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
 import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";

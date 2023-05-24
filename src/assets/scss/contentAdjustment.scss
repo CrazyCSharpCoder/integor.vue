@@ -1,12 +1,20 @@
-$padding-step-small: 4px;
-$padding-step: 8px;
+// Padding steps
+$padding-step: 4px;
+$padding-step-large: $padding-step * 2;
 
-$page-horizontal-gap: $padding-step * 12;
-$page-vertical-gap: $padding-step * 4;
+// Borders
+$border-radius: 14px;
+$border-radius-large: $padding-step * 5;
 
-$page-sections-vertical-gap: $padding-step * 2;
+// Page gap
+$page-horizontal-gap: $padding-step-large * 16;
+$page-vertical-gap: $padding-step-large * 4;
 
-$header-height: 40px;
+// Page sections
+$page-section-vertical-gap: $padding-step;
+$page-section-horizontal-gap: $border-radius * 2;
+$page-section-horizontal-gap-small: $border-radius;
 
-$modal-window-horizontal-gap: $padding-step * 2;
-$modal-window-vertical-gap: $padding-step;
+// Elements
+$modal-window-horizontal-gap: $padding-step-large * 2;
+$modal-window-vertical-gap: $padding-step-large;

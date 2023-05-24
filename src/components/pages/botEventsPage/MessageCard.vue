@@ -81,19 +81,19 @@ export default {
 @import "/src/assets/scss/controls/panels";
 @import "/src/assets/scss/controls/buttons";
 
-$grouped-items-padding: $padding-step-small;
+$grouped-items-padding: $padding-step;
 
 .message-card {
   display: flex;
   align-items: stretch;
-  gap: $padding-step * 4;
+  gap: $padding-step-large * 4;
 
-  padding: $padding-step * 2 $page-horizontal-gap;
+  padding: $padding-step-large * 2 $page-horizontal-gap;
 }
 
 .message-meta {
   display: flex;
-  gap: $padding-step * 2;
+  gap: $padding-step-large * 2;
 
   overflow: hidden;
 
@@ -134,13 +134,13 @@ $grouped-items-padding: $padding-step-small;
   }
 
   .message-text {
-    border: 1px solid $color-4;
-    padding: $padding-step-small;
+    border: 1px solid $color-1-shade-4;
+    padding: $padding-step;
 
     height: 100%;
 
     font-size: 12px;
-    color: rgba($color-3-text, 0.8);
+    color: rgba($color-1-text, 0.8);
   }
 }
 
@@ -168,7 +168,7 @@ $grouped-items-padding: $padding-step-small;
     }
   }
   .open-chat {
-    @include button($color-2, $color-2-text);
+    @include button($color-1-shade-2, $color-1-text);
     width: fit-content;
   }
 }

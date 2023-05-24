@@ -36,7 +36,7 @@ export default {
 
 .cards-list {
   @extend %list-reset;
-  @include horizontal-vertical-list($padding-step, $padding-step);
+  @include horizontal-vertical-list($padding-step-large, $padding-step-large);
 
   display: flex;
   flex-wrap: wrap;
@@ -49,10 +49,14 @@ export default {
     overflow: hidden;
     
     @media (max-width: $large-threshold) {
-      flex-basis: 100%
+      flex-basis: 50%
     }
 
-    flex-basis: 50%
+    @media (max-width: $medium-threshold) {
+      flex-basis: 100%;
+    }
+
+    flex-basis: 33%
   }
 }
 

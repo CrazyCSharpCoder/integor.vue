@@ -14,7 +14,7 @@
 <script>
 import HeaderedModalWindow from "@/components/primitives/modalWindow/HeaderedModalWindow";
 import ModalWindowMixin from "@/components/primitives/modalWindow/ModalWindowMixin";
-import InputBotForm from "@/components/pages/myBotsPage/InputBotForm";
+import InputBotForm from "@/components/pages/myBotsPage/primitives/InputBotForm";
 import ErrorHandlerMixin from "@/components/mixins/ErrorHandlerMixin";
 
 export default {

@@ -39,7 +39,7 @@ export default {
 @import "../../../../assets/scss/controls/buttons";
 
 .chat-gap {
-  @include button(transparent, $color-5-text, $color-4, $color-4-text);
+  @include button(transparent, $color-1-text, $color-1-shade-4, $color-1-text);
   padding-right: 24px;
 }
 

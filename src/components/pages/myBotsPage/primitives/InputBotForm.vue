@@ -88,29 +88,29 @@ export default {
 
 <style lang="scss">
 
-@import "/src/assets/scss/palette";
-@import "/src/assets/scss/contentAdjustment";
+@import "../../../../assets/scss/palette";
+@import "../../../../assets/scss/contentAdjustment";
 
-@import "/src/assets/scss/controls/input";
-@import "/src/assets/scss/controls/buttons";
-@import "/src/assets/scss/patterns/contentAdjustment";
-@import "/src/assets/scss/patterns/forms";
+@import "../../../../assets/scss/controls/input";
+@import "../../../../assets/scss/controls/buttons";
+@import "../../../../assets/scss/patterns/contentAdjustment";
+@import "../../../../assets/scss/patterns/forms";
 
 .bot-input {
   width: 100%;
 
   .form-fields, .form-controls {
-    padding: $padding-step-small * 3 0;
+    padding: $padding-step * 3 0;
   }
 
   .form-fields {
-    @include vertical-list($padding-step-small);
+    @include vertical-list($padding-step);
 
     .form-field {
       @extend %list-item;
 
       .input {
-        @include input($color-2, $color-5);
+        @include input($color-1-shade-2, $color-1-shade-5);
         width: 100%;
 
         &.information {
@@ -124,10 +124,10 @@ export default {
   }
 
   .form-controls {
-    border-top: 1px solid $color-3;
+    border-top: 1px solid $color-1-shade-3;
 
     .confirm {
-      @include button($color-5, $color-5-text);
+      @include button($color-1-shade-5, $color-1-text);
       width: 100%;
     }
   }

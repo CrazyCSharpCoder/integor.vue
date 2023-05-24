@@ -22,7 +22,7 @@ import ModalWindowMixin from "@/components/primitives/modalWindow/ModalWindowMix
 import ErrorHandlerMixin from "@/components/mixins/ErrorHandlerMixin";
 
 import HeaderedModalWindow from "@/components/primitives/modalWindow/HeaderedModalWindow";
-import InputBotForm from "@/components/pages/myBotsPage/InputBotForm";
+import InputBotForm from "@/components/pages/myBotsPage/primitives/InputBotForm";
 
 export default {
   components: {InputBotForm, HeaderedModalWindow},

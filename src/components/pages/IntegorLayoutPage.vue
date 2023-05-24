@@ -1,12 +1,17 @@
 <template>
   <integor-header>
-    <router-view name="header">
-      <page-adjusted-content>
-        <router-view name="header">
-          <navigation-panel :items="navigationItems" :itemComponent="navigationItemComponent"/>
-        </router-view>
-      </page-adjusted-content>
-    </router-view>
+    <page-adjusted-content>
+      <left-right-content>
+        <template #first>
+          <div class="nav-panel-container">
+            <navigation-panel :items="navigationItems" :itemComponent="navigationItemComponent"/>
+          </div>
+        </template>
+        <template #second>
+          <router-view name="contextActions"></router-view>
+        </template>
+      </left-right-content>
+    </page-adjusted-content>
   </integor-header>
   <main class="main">
     <connection-failed-display v-if="hasConnectionFailedError"/>
@@ -38,6 +43,7 @@ import NavigationPanel from "@/components/primitives/panels/NavigationPanel";
 import NavigationItem from "@/components/primitives/special/HeaderNavItem";
 import ConnectionFailedDisplay from "@/components/primitives/InformationDisplay/ConnectionFailedDisplay";
 import ServerErrorDisplay from "@/components/primitives/InformationDisplay/ServerErrorDisplay";
+import LeftRightContent from "@/components/primitives/contentAdjustment/LeftRightContent";
 
 const navigationItems = [
   {
@@ -52,6 +58,7 @@ const navigationItems = [
 
 export default {
   components: {
+    LeftRightContent,
     ServerErrorDisplay,
     ConnectionFailedDisplay, NavigationPanel, PageAdjustedContent, IntegorFooter, IntegorHeader},
   mixins: [
@@ -76,6 +83,11 @@ export default {
 <style scoped lang="scss">
 
 @import '/src/assets/scss/patterns/contentAdjustment';
+@import '/src/assets/scss/projectSpecific/header';
+
+.nav-panel-container {
+  margin: 0 (-$nav-item-horizontal-padding);
+}
 
 .main {
   @extend %full-page-content;

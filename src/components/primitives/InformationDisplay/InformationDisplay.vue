@@ -76,7 +76,7 @@ $default-width: 500px;
   justify-content: center;
   align-items: center;
 
-  gap: $padding-step * 2;
+  gap: $padding-step-large * 2;
 }
 
 .error-title {

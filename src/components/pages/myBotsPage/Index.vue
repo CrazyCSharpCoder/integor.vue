@@ -4,11 +4,8 @@
     <template v-else>
       <integor-extra-header>
         <page-adjusted-content>
-          <ul class="bots-management-panel">
-            <li class="bots-management-panel-item">
-              <button @click="openAddBotModalWindow" class="bot-action">Добавить</button>
-            </li>
-          </ul>
+<!--          TODO add bot gaps-->
+          Content
         </page-adjusted-content>
       </integor-extra-header>
       <information-display v-if="myBots.length === 0"
@@ -21,11 +18,13 @@
         </template>
       </information-display>
       <section v-else class="my-bots-page-content">
-        <cards-list
-            :card-component="cardComponent"
-            :items="myBots"
-            :options-factory="createBotCardOptions"
-        />
+        <div class="cards-list-container">
+          <cards-list
+              :card-component="cardComponent"
+              :items="myBots"
+              :options-factory="createBotCardOptions"
+          />
+        </div>
       </section>
     </template>
     <add-bot-modal-window/>
@@ -38,7 +37,7 @@
 import {mapGetters} from 'vuex'
 import {shallowRef} from "vue";
 
-import BotCard from "@/components/pages/myBotsPage/BotCard";
+import BotCard from "@/components/pages/myBotsPage/primitives/BotCard";
 import CardsList from "@/components/primitives/controls/CardsList";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
@@ -100,7 +99,11 @@ export default {
 }
 
 .my-bots-page-content {
-  @extend %page-content
+  @extend %page-content;
+}
+
+.cards-list-container {
+  margin: 0 (-$border-radius-large);
 }
 
 .bots-management-panel {
@@ -108,7 +111,7 @@ export default {
 
   .bots-management-panel-item {
     .bot-action {
-      @include button($color-4, $color-4-text);
+      @include button($color-1-shade-4, $color-1-text);
     }
   }
 }

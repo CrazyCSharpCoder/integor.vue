@@ -13,13 +13,23 @@
 }
 
 %content-section {
-  padding: $page-sections-vertical-gap 0;
+  padding: $page-section-vertical-gap 0;
 }
 
 %full-page-content {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
+}
+
+%controls-container {
+  margin: 0 $page-section-horizontal-gap-small - $page-section-horizontal-gap;
+}
+
+@mixin round-borders-control($border-radius: $border-radius) {
+  border-radius: $border-radius;
+  line-height: $border-radius * 2;
+  padding: 0 $border-radius;
 }
 
 @mixin vertical-list($margin-vert) {

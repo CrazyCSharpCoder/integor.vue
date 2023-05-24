@@ -22,7 +22,7 @@ export default {
 @import "/src/assets/scss/controls/buttons";
 
 .all-chats-gap {
-  @include button(transparent, $color-5-text, $color-4, $color-4-text);
+  @include button(transparent, $color-1-text, $color-1-shade-4, $color-1-text);
 }
 
 </style>
