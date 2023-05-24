@@ -13,7 +13,9 @@
           </p>
           <p>
             Бот останется доступен во вкладке
-            <router-link :to="{name: $routeNames.archive}">Архив</router-link>
+            <router-link :to="{name: $routeNames.archive}" class="archive-link">
+              Архив
+            </router-link>
           </p>
           <p>
             Вы можете восстановить его в любое время
@@ -99,7 +101,6 @@ export default {
 @import "/src/assets/scss/controls/panels";
 @import "/src/assets/scss/controls/buttons";
 
-
 .modal-window-content {
   @extend %include-all-text;
 
@@ -112,7 +113,6 @@ export default {
   flex-direction: column;
   align-items: stretch;
 
-  border-top: 1px solid $color-1-shade-3;
   padding-top: $modal-window-vertical-gap;
 
   .confirm, .cancel {
@@ -120,11 +120,15 @@ export default {
   }
 
   .confirm {
-    @include button($color-1-shade-5, $color-1-text);
+    @include button();
   }
   .cancel {
-    @include button($color-1-shade-1, $color-1-text);
+    @extend %secondary-button;
   }
+}
+
+.archive-link {
+  @extend %inline-link;
 }
 
 </style>

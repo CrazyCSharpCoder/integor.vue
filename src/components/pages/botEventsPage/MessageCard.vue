@@ -126,7 +126,7 @@ $grouped-items-padding: $padding-step;
   gap: $grouped-items-padding;
 
   .message-info {
-    @extend %breadcrumbs;
+    @include breadcrumbs();
 
     .message-id, .message-time {
       @extend %breadcrumbs-item;
@@ -145,7 +145,7 @@ $grouped-items-padding: $padding-step;
 }
 
 .sender-primary-info {
-  @extend %breadcrumbs;
+  @include breadcrumbs();
   overflow: hidden;
 
   .sender-name, .sender-bot {
@@ -161,7 +161,7 @@ $grouped-items-padding: $padding-step;
 
 .chat {
   .chat-primary-info {
-    @extend %breadcrumbs;
+    @include breadcrumbs();
 
     .chat-id, .chat-type {
       @extend %breadcrumbs-item;

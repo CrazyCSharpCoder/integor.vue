@@ -1,23 +1,23 @@
 <template>
   <form @submit.prevent="submitData" class="bot-input">
-    <div class="form-fields">
-      <div class="form-field">
+    <div class="form-items">
+      <div class="form-item">
         <input v-model="input.title" type="text" placeholder="Наименование бота"
                :class="['input', {'error': titleInvalid}]"/>
         <div v-if="titleInvalid" class="input-error">
           {{outputFirst(v$.input.title)}}
         </div>
       </div>
-      <div class="form-field">
+      <div class="form-item">
         <input v-model="input.token" type="text" placeholder="Токен бота"
                :class="['input', {error: tokenInvalid}]"/>
         <div v-if="tokenInvalid" class="input-error">
           {{outputFirst(v$.input.token)}}
         </div>
       </div>
-    </div>
-    <div class="form-controls">
-      <button class="confirm">Подтвердить</button>
+      <div class="form-item form-controls">
+        <button class="confirm">Подтвердить</button>
+      </div>
     </div>
     <div class="form-error">
       {{formError}}
@@ -98,36 +98,32 @@ export default {
 
 .bot-input {
   width: 100%;
+  padding: $padding-step * 3 0;
 
-  .form-fields, .form-controls {
-    padding: $padding-step * 3 0;
-  }
+  .form-items {
+    @include vertical-list($padding-step-large);
 
-  .form-fields {
-    @include vertical-list($padding-step);
-
-    .form-field {
+    .form-item {
       @extend %list-item;
 
       .input {
-        @include input($color-1-shade-2, $color-1-shade-5);
+        @include input();
         width: 100%;
 
-        &.information {
+        &.error {
           @extend %error-input;
         }
       }
       .input-error {
         @extend %form-error;
+        padding-left: $border-radius + 2px;
       }
     }
   }
 
   .form-controls {
-    border-top: 1px solid $color-1-shade-3;
-
     .confirm {
-      @include button($color-1-shade-5, $color-1-text);
+      @include button();
       width: 100%;
     }
   }

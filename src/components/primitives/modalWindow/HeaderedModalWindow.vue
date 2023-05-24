@@ -12,6 +12,9 @@
       <div class="modal-window-content">
         <slot></slot>
       </div>
+      <div v-if="$slots.footer" class="modal-window-footer">
+        <slot name="footer"></slot>
+      </div>
     </section>
   </modal-window-template>
 </template>
@@ -44,35 +47,42 @@ export default {
 
 @import "/src/assets/scss/controls/buttons";
 
-$close-button-size: 32px;
+$close-button-size: 26px;
 
 .modal-window {
-  background: $color-1-shade-4;
-  color: $color-1-text;
+  background: $background-color;
+  color: $background-text-color;
 
   overflow: hidden;
 
+  border-radius: $border-radius-large;
+
   .modal-window-header {
-    background: $color-1-shade-1;
-    color: $color-1-text;
+    background: $color-2-shade-1;
+    color: $color-2-text;
+
     display: flex;
     align-items: stretch;
 
     .header-content-container {
-      font-size: $h2-font-size;
       flex-grow: 1;
 
       display: flex;
       align-items: center;
+
+      font-weight: $bold;
+      line-height: $border-radius * 2;
+
+      padding: 0 $page-section-horizontal-gap;
     }
 
     .close-button-container {
-      height: $close-button-size + $padding-step * 2;
       flex-grow: 0;
-    }
 
-    .header-content-container, .close-button-container {
-      padding: $modal-window-vertical-gap $modal-window-horizontal-gap;
+      display: flex;
+      align-items: center;
+
+      padding: 0 $page-section-horizontal-gap-small;
     }
   }
 

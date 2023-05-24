@@ -59,3 +59,14 @@
   @include icon($icon-url, $icon-size);
   cursor: pointer;
 }
+
+%inline-link {
+  transition: $transition;
+
+  color: $color-2-shade-1;
+  text-decoration: underline;
+
+  &:hover, &:focus {
+    color: $color-2-shade-2;
+  }
+}

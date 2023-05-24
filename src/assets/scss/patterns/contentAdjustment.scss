@@ -26,9 +26,11 @@
   margin: 0 $page-section-horizontal-gap-small - $page-section-horizontal-gap;
 }
 
-@mixin round-borders-control($border-radius: $border-radius) {
+@mixin round-borders-control($border-radius: $border-radius, $border-width: 0) {
+  border-width: $border-width;
+
   border-radius: $border-radius;
-  line-height: $border-radius * 2;
+  line-height: ($border-radius - $border-width) * 2;
   padding: 0 $border-radius;
 }
 

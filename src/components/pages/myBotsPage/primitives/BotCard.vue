@@ -51,9 +51,6 @@ export default {
     }
   },
   methods: {
-    onUpdate() {
-      this.$emitter.emit(this.options.updateBotEvent, this.item)
-    },
     onArchive() {
       this.$emitter.emit(this.options.archiveBotEvent, this.item)
     },
@@ -93,7 +90,7 @@ $controls-gap: $padding-step * 2;
 }
 
 .bot-card-header {
-  @extend %breadcrumbs;
+  @include breadcrumbs();
 
   .bot-title {
     font-weight: $bold;
@@ -114,7 +111,7 @@ $controls-gap: $padding-step * 2;
 
   .bot-card-controls-item {
     padding: 0 $controls-gap;
-    flex: 0 0 50%;
+    flex: 0 1 50%;
   }
 
   .bot-card-button {

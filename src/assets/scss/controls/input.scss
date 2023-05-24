@@ -2,26 +2,39 @@
 @import "../contentAdjustment";
 @import "../animations";
 
+@import "../patterns/contentAdjustment";
+
 $input-border-width: 2px;
 
-@mixin input($border-color, $border-focus-color) {
+@mixin input(
+  $border-color: $color-2-shade-1,
+  $border-focus-color: $color-2-shade-2
+) {
+  @include round-borders-control($border-radius, $input-border-width);
+
   outline: none;
-  padding: ($padding-step - $input-border-width) ($padding-step-large - $input-border-width);
   font-size: inherit;
 
   border: $input-border-width solid $border-color;
 
   transition: $transition;
 
+  background: $color-1-shade-4;
+  color: $color-1-text;
+
+  &::placeholder {
+    color: rgba($color-1-text, 0.5);
+  }
+
   &:focus, &:hover {
     border-color: $border-focus-color;
   }
 
   &%error-input {
-    border-color: $error-color-1;
+    border-color: $error-color-shade-1;
 
     &:focus, &:hover {
-      border-color: $error-color-1;
+      border-color: $error-color-shade-2;
     }
   }
 }
