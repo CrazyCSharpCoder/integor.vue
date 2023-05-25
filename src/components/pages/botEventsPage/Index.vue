@@ -69,7 +69,9 @@
               />
             </div>
             <div class="sidebar-container">
-              <bot-events-page-sidebar :bot="bot" :total-events="totalEvents"/>
+              <div class="sidebar-sticky-container">
+                <bot-events-page-sidebar :bot="bot" :total-events="totalEvents"/>
+              </div>
             </div>
           </div>
           <div v-if="pagesCount && pagesCount > 1" class="pagination-container">
@@ -296,6 +298,7 @@ export default {
 @import "/src/assets/scss/controls/buttons";
 
 $sidebar-width: 340px;
+$sidebar-top-position: $border-radius * 2 + $page-vertical-gap;
 
 .bot-events-page {
   @extend %full-page-content;
@@ -321,13 +324,21 @@ $sidebar-width: 340px;
 }
 
 .sidebar-container {
-  flex: 0 0 $sidebar-width;
-  background: $color-1-shade-3;
+  flex-shrink: 0;
 
-  padding: $page-section-vertical-gap $page-section-horizontal-gap;
-  border-radius: $border-radius-large;
+  .sidebar-sticky-container {
+    position: sticky;
+    width: $sidebar-width;
 
-  overflow: hidden;
+    overflow: hidden;
+
+    top: $sidebar-top-position;
+    height: calc(100vh - $sidebar-top-position - $page-vertical-gap);
+
+    padding: $page-section-vertical-gap $page-section-horizontal-gap;
+    background: $color-1-shade-3;
+    border-radius: $border-radius-large;
+  }
 }
 
 .pagination-container {
