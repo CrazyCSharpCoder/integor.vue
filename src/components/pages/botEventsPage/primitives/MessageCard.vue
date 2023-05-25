@@ -43,6 +43,16 @@
             {{chat.type}}
           </div>
         </div>
+        <div class="info-row">
+          <div class="info-attribute">
+            <span class="attribute-name">First name:</span>
+            {{chat.firstName}}
+          </div>
+          <div v-if="chat.lastName" class="info-attribute">
+            <span class="attribute-name">Last name:</span>
+            {{chat.lastName}}
+          </div>
+        </div>
       </div>
       <div v-if="options?.hasOpenChatButton" class="controls">
         <router-link class="action" :to="{
