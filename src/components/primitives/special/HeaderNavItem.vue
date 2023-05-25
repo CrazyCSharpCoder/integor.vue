@@ -34,7 +34,7 @@ export default {
   line-height: $header-height;
 
   text-decoration: underline transparent;
-  text-underline-offset: 4px;
+  text-underline-offset: $nav-items-ubderline-offset;
 
   transition: $transition;
 
