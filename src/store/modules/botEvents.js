@@ -45,6 +45,9 @@ export default {
 
             state.filter = filter
         },
+        SET_BOT(state, bot) {
+            state.bot = bot
+        },
         DISCARD(state) {
             state.bot = state.totalEvents = state.messages = undefined
         }
@@ -73,6 +76,12 @@ export default {
             })
 
             return botEventsInfo
+        },
+        async updateBot({commit}, bot) {
+            const updateResult = await api.bots.updateBot(bot)
+            commit('SET_BOT', updateResult.bot)
+
+            return bot
         }
     }
 }

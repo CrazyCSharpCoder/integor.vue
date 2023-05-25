@@ -3,7 +3,7 @@
     <section class="bot-info">
       <bot-info :bot="bot" :total-events="totalEvents"/>
       <div class="bot-info-controls">
-        <button class="update-bot">Изменить</button>
+        <button @click="onUpdate" class="update-bot">Изменить</button>
       </div>
     </section>
     <div class="separator"></div>
@@ -33,6 +33,7 @@
 
 <script>
 import BotInfo from "@/components/primitives/special/BotInfo";
+
 export default {
   components: {BotInfo},
   props: {
@@ -43,6 +44,11 @@ export default {
     totalEvents: {
       required: true,
       type: Number
+    }
+  },
+  methods: {
+    onUpdate() {
+      this.$emitter.emit(this.$appEvents.bots.openUpdateBotModalWindow, this.bot)
     }
   }
 }

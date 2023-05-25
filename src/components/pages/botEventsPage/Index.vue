@@ -89,6 +89,7 @@
               />
             </div>
           </div>
+          <update-bot-modal-window/>
         </div>
       </template>
     </template>
@@ -115,10 +116,12 @@ import ChatGap from "@/components/primitives/userHistory/ChatGap";
 import BotEventsPaginationLink from "@/components/pages/botEventsPage/pagination/BotEventsPaginationLink";
 import BotEventsPaginationDots from "@/components/pages/botEventsPage/pagination/BotEventsPaginationDots"
 import BotEventsPageSidebar from "@/components/pages/botEventsPage/primitives/BotEventsPageSidebar";
+import UpdateBotModalWindow from "@/components/pages/myBotsPage/modalWindows/UpdateBotModalWindow";
 
 export default {
   name: "BotEventsPage",
   components: {
+    UpdateBotModalWindow,
     BotEventsPageSidebar,
     PageAdjustedContent,
     IntegorExtraHeader,

@@ -3,14 +3,14 @@
                          :active="isActive"
                          :on-close-clicked="$appEvents.bots.closeUpdateBotModalWindow">
     <template #header>
-      <div class="update-bot-header-container">Обновить бота "{{bot.title}}"</div>
+      <div class="update-bot-header-container">Обновить бота "{{context.title}}"</div>
     </template>
     <template #default>
       <div v-if="isActive" class="update-bot-form-container">
         <input-bot-form
             :submit-event="$appEvents.bots.submitUpdateBot"
             :form-error="theError"
-            :input-data="bot"
+            :input-data="context"
         />
       </div>
     </template>
@@ -30,15 +30,10 @@ export default {
     ModalWindowMixin,
     ErrorHandlerMixin
   ],
-  computed: {
-    bot() {
-      return this.context.bot
-    }
-  },
   methods: {
     async updateBot(bot) {
       try {
-        await this.$store.dispatch('updateBot', bot)
+        await this.$store.dispatch('botEvents/updateBot', bot)
       }
       catch (error) {
         this.setTheError(
