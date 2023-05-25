@@ -112,8 +112,10 @@ $page-height: 36px;
   @extend %list-reset;
 
   display: flex;
+
   justify-content: center;
   align-items: stretch;
+
   gap: $padding-step;
 
   > .page-container {

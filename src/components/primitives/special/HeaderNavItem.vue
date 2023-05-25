@@ -38,6 +38,8 @@ export default {
 
   transition: $transition;
 
+  white-space: nowrap;
+
   &:hover, &.current {
     text-decoration-color: inherit;
   }

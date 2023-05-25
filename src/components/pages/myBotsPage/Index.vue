@@ -42,8 +42,8 @@ import CardsList from "@/components/primitives/controls/CardsList";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import AddBotModalWindow from "@/components/pages/myBotsPage/modalWindows/AddBotModalWindow";
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
-import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
+import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
 import UpdateBotModalWindow from "@/components/pages/myBotsPage/modalWindows/UpdateBotModalWindow";
 import ArchiveBotModalWindow from "@/components/pages/myBotsPage/modalWindows/ArchiveBotModalWindow";
 

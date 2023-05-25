@@ -63,6 +63,7 @@ export default {
             const botEventsInfo = await api.botEvents.getEvents(
                 botId, startIndex, pageSize, filter
             )
+
             commit('SET_INFO', {
                 bot: botEventsInfo.bot,
                 totalEvents: botEventsInfo.totalEvents,

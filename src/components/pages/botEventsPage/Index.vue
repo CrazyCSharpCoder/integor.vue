@@ -58,27 +58,32 @@
             />
           </page-adjusted-content>
         </integor-extra-header>
-        <div class="bot-events-page-content">
-          <items-list v-if="messages"
-                      :item-component="itemComponent"
-                      :items="messages"
-                      separator-color="#D9D9D9"
-                      :options="{hideChat: Boolean(filter.chatId)}"
-          />
-        </div>
-        <div v-if="pagesCount && pagesCount > 1"
-             class="pagination-container"
-        >
-          <div class="pagination-background">
-            <pagination-component
-                :page-component="pageComponent"
-                :dots-component="pageDotsComponent"
+        <div class="bot-events-page-content-container">
+          <div class="bot-events-page-content">
+            <div class="bot-events-list-container">
+              <items-list v-if="messages"
+                          :item-component="itemComponent"
+                          :options-factory="createMessageOptions"
+                          :items="messages"
+                          :options="{hideChat: Boolean(filter.chatId)}"
+              />
+            </div>
+            <div class="sidebar-container">
+              <bot-events-page-sidebar :bot="bot" :total-events="totalEvents"/>
+            </div>
+          </div>
+          <div v-if="pagesCount && pagesCount > 1" class="pagination-container">
+            <div class="pagination-background">
+              <pagination-component
+                  :page-component="pageComponent"
+                  :dots-component="pageDotsComponent"
 
-                :pages-count="pagesCount"
-                :current-page-index="pageIndex"
+                  :pages-count="pagesCount"
+                  :current-page-index="pageIndex"
 
-                :options-factory="createPageOptions"
-            />
+                  :options-factory="createPageOptions"
+              />
+            </div>
           </div>
         </div>
       </template>
@@ -93,22 +98,24 @@ import {shallowRef} from "vue";
 import {ServerError} from "@/errorHandling/serverErrors";
 
 import ItemsList from "@/components/primitives/controls/ItemsList";
-import MessageCard from "@/components/pages/botEventsPage/MessageCard";
+import MessageCardWrapper from "@/components/pages/botEventsPage/primitives/MessageCardWrapper";
 import PaginationComponent from "@/components/primitives/PaginationComponent";
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
 import ErrorContainerMixin from "@/components/mixins/ErrorContainerMixin";
-import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
+import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import ClosedGapsPanel from "@/components/primitives/panels/StandardClosedGapsPanel";
 import ChatGap from "@/components/pages/botEventsPage/chatsPanel/ChatGap";
 import AllChatsGap from "@/components/pages/botEventsPage/chatsPanel/AllChatsGap";
-import BotEventsPage from "@/components/pages/botEventsPage/pagination/BotEventsPage";
-import BotEventsPageDots from "@/components/pages/botEventsPage/pagination/BotEventsPageDots"
+import BotEventsPaginationLink from "@/components/pages/botEventsPage/pagination/BotEventsPaginationLink";
+import BotEventsPaginationDots from "@/components/pages/botEventsPage/pagination/BotEventsPaginationDots"
+import BotEventsPageSidebar from "@/components/pages/botEventsPage/primitives/BotEventsPageSidebar";
 
 export default {
   name: "BotEventsPage",
   components: {
+    BotEventsPageSidebar,
     ClosedGapsPanel,
     PageAdjustedContent,
     IntegorExtraHeader,
@@ -122,13 +129,13 @@ export default {
   ],
   data() {
     return {
-      itemComponent: shallowRef(MessageCard),
+      itemComponent: shallowRef(MessageCardWrapper),
 
       allChatsGapComponent: shallowRef(AllChatsGap),
       chatGapComponent: shallowRef(ChatGap),
 
-      pageComponent: shallowRef(BotEventsPage),
-      pageDotsComponent: shallowRef(BotEventsPageDots),
+      pageComponent: shallowRef(BotEventsPaginationLink),
+      pageDotsComponent: shallowRef(BotEventsPaginationDots),
 
       filter: {
         chatId: undefined
@@ -159,6 +166,11 @@ export default {
       return {
         botId: this.botId,
         filter: this.appliedFilter
+      }
+    },
+    createMessageOptions() {
+      return {
+        hasOpenChatButton: !this.chatId
       }
     },
     async handleServerError(error) {
@@ -278,27 +290,63 @@ export default {
 <style scoped lang="scss">
 
 @import "/src/assets/scss/palette";
+@import "/src/assets/scss/contentAdjustment";
+
 @import "/src/assets/scss/patterns/contentAdjustment";
 @import "/src/assets/scss/controls/buttons";
+
+$sidebar-width: 340px;
 
 .bot-events-page {
   @extend %full-page-content;
 }
 
-.bot-events-page-content {
-  @extend %page-vertical-content;
+.bot-events-page-content-container {
+  @extend %page-content;
   @extend %full-page-content;
+
+  .bot-events-page-content {
+    @extend %full-page-content;
+
+    flex-direction: row;
+    gap: $padding-step-large * 3;
+
+    margin: 0 (-$page-section-horizontal-gap);
+  }
+}
+
+.bot-events-list-container {
+  margin: -$padding-step-large * 2 0;
+  flex-grow: 1;
+}
+
+.sidebar-container {
+  flex: 0 0 $sidebar-width;
+  background: $color-1-shade-3;
+
+  padding: $page-section-vertical-gap $page-section-horizontal-gap;
+  border-radius: $border-radius-large;
+
+  overflow: hidden;
 }
 
 .pagination-container {
   position: sticky;
-  bottom: 0;
+  bottom: $padding-step;
 
   display: flex;
   justify-content: center;
 
+  margin-top: $page-vertical-gap;
+
   .pagination-background {
-    background: $color-1-shade-4;
+    border-top-left-radius: $border-radius-large;
+    border-top-right-radius: $border-radius-large;
+
+    padding: $padding-step-large;
+    margin: -$padding-step-large;
+
+    background: $background-color;
   }
 }
 

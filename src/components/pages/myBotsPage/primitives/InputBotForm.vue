@@ -98,7 +98,6 @@ export default {
 
 .bot-input {
   width: 100%;
-  padding: $padding-step * 3 0;
 
   .form-items {
     @include vertical-list($padding-step-large);

@@ -31,8 +31,8 @@ import DisposableEventsMixin from "@/components/mixins/DisposableEventsMixin";
 
 import BotCard from "@/components/pages/myBotsPage/primitives/BotCard";
 import CardsList from "@/components/primitives/controls/CardsList";
-import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
+import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
 
 export default {
   components: {InformationDisplay, LoadingDisplay, CardsList},

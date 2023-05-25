@@ -43,6 +43,9 @@ body {
 
   background: $background-color;
   color: $background-text-color;
+
   font-family: "Roboto", sans-serif;
+
+  font-size: 14px;
 }
 </style>

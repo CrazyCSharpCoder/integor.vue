@@ -41,8 +41,8 @@ import IntegorFooter from "@/components/primitives/IntegorFooter";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import NavigationPanel from "@/components/primitives/panels/NavigationPanel";
 import NavigationItem from "@/components/primitives/special/HeaderNavItem";
-import ConnectionFailedDisplay from "@/components/primitives/InformationDisplay/ConnectionFailedDisplay";
-import ServerErrorDisplay from "@/components/primitives/InformationDisplay/ServerErrorDisplay";
+import ConnectionFailedDisplay from "@/components/primitives/informationDisplay/ConnectionFailedDisplay";
+import ServerErrorDisplay from "@/components/primitives/informationDisplay/ServerErrorDisplay";
 import LeftRightContent from "@/components/primitives/contentAdjustment/LeftRightContent";
 
 const navigationItems = [

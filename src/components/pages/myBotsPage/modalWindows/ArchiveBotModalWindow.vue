@@ -104,12 +104,12 @@ export default {
 .modal-window-content {
   @extend %include-all-text;
 
-  padding: $modal-window-vertical-gap $modal-window-horizontal-gap;
+  padding: $padding-step-large * 2 $page-section-horizontal-gap-small;
   width: 400px;
 }
 
 .modal-window-controls {
-  @include panel($padding-step-large);
+  @include panel($padding-step-large * 2);
   flex-direction: column;
   align-items: stretch;
 

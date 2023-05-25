@@ -1,11 +1,7 @@
 <template>
   <section class="bot-card">
-    <div class="bot-card-item bot-card-header">
-      <div class="bot-title">{{bot.title}}</div>
-      <div class="bot-event-count">{{item.totalEvents}} событий</div>
-    </div>
-    <div class="bot-card-item bot-token">
-      <hidden-data-display :data="bot.token" placeholder="Токен бота"/>
+    <div class="bot-card-item bot-info-container">
+      <bot-info :bot="item.bot" :total-events="item.totalEvents"/>
     </div>
     <ul class="bot-card-item bot-card-controls">
       <li class="bot-card-controls-item">
@@ -25,7 +21,7 @@
       </template>
       <template v-else>
         <li v-if="options?.unarchiveBotEvent" class="bot-card-controls-item">
-<!--          TODO add handler-->
+          <!--          TODO add handler-->
           <button @click="onUnarchive" class="bot-card-button unarchive-bot">Разархивировать</button>
         </li>
       </template>
@@ -34,10 +30,10 @@
 </template>
 
 <script>
-import HiddenDataDisplay from "@/components/primitives/controls/HiddenDataDisplay";
+import BotInfo from "@/components/primitives/special/BotInfo";
 
 export default {
-  components: {HiddenDataDisplay},
+  components: {BotInfo},
   props: {
     item: {
       type: Object,
@@ -79,26 +75,6 @@ $controls-gap: $padding-step * 2;
   padding: $page-section-vertical-gap $page-section-horizontal-gap;
 
   background: $color-1-shade-3;
-
-  .bot-card-item {
-    padding: $padding-step-large 0;
-  }
-
-  .bot-token{
-    @extend %controls-container;
-  }
-}
-
-.bot-card-header {
-  @include breadcrumbs();
-
-  .bot-title {
-    font-weight: $bold;
-  }
-
-  .bot-title, .bot-event-count {
-    @extend %breadcrumbs-item;
-  }
 }
 
 .bot-card-controls {
@@ -108,6 +84,7 @@ $controls-gap: $padding-step * 2;
   justify-content: stretch;
 
   margin: 0 (-$controls-gap);
+  padding-top: $page-section-vertical-gap;
 
   .bot-card-controls-item {
     padding: 0 $controls-gap;
