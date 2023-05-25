@@ -12,10 +12,15 @@ function remove(collection, item) {
     collection.splice(index, 1)
 }
 
-export {getById, getIndexById, remove}
+function getLast(collection) {
+    return collection[collection.length - 1]
+}
+
+export {getById, getIndexById, remove, getLast}
 
 export default {
     getById,
     getIndexById,
-    remove
+    remove,
+    getLast
 }

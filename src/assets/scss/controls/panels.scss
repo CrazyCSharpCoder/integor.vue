@@ -26,3 +26,18 @@
     content: none;
   }
 }
+
+%dropdown {
+  position: relative;
+
+  %content {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover %content {
+    opacity: 1;
+    pointer-events: visible;
+  }
+}

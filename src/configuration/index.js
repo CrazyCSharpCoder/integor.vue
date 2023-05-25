@@ -1,9 +1,9 @@
 import validation from "@/configuration/validation";
 import http from "@/configuration/http";
-import botEvents from "@/configuration/botEvents";
+import history from "@/configuration/history";
 
 export default {
     validation,
     http,
-    botEvents
+    history
 }

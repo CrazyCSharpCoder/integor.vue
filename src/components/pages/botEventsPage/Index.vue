@@ -43,20 +43,23 @@
 
 <!--      Нет ошибок, есть события-->
       <template v-else>
-        <integor-extra-header>
-          <page-adjusted-content>
-            <closed-gaps-panel
-                :default-element="{
-                  component: allChatsGapComponent,
-                  data: {
-                    botId
-                  }
-                }"
-                :item-component="chatGapComponent"
-                :close-gap-event="$appEvents.botEvents.chatGapClosed"
-                :items="recentChats"
-            />
-          </page-adjusted-content>
+        <integor-extra-header v-if="recentChatInfos && recentChatInfos.length">
+            <page-adjusted-content>
+              <div class="recent-chats-menu">
+                <div :class="['all-chats-link', {current: !chatId}]">
+                  <router-link :to="allChatsRoute">
+                    Все чаты
+                  </router-link>
+                </div>
+                <items-list
+                    :horizontal="true"
+
+                    :item-component="chatGapComponent"
+                    :items="recentChatInfos"
+                    :options-factory="createChatNavigationOptions"
+                />
+              </div>
+            </page-adjusted-content>
         </integor-extra-header>
         <div class="bot-events-page-content-container">
           <div class="bot-events-page-content">
@@ -65,7 +68,6 @@
                           :item-component="itemComponent"
                           :options-factory="createMessageOptions"
                           :items="messages"
-                          :options="{hideChat: Boolean(filter.chatId)}"
               />
             </div>
             <div class="sidebar-container">
@@ -99,17 +101,17 @@ import {shallowRef} from "vue";
 
 import {ServerError} from "@/errorHandling/serverErrors";
 
+import ErrorContainerMixin from "@/components/mixins/ErrorContainerMixin";
+import DisposableEventsMixin from "@/components/mixins/DisposableEventsMixin";
+
 import ItemsList from "@/components/primitives/controls/ItemsList";
 import MessageCardWrapper from "@/components/pages/botEventsPage/primitives/MessageCardWrapper";
 import PaginationComponent from "@/components/primitives/PaginationComponent";
 import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
-import ErrorContainerMixin from "@/components/mixins/ErrorContainerMixin";
 import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
-import ClosedGapsPanel from "@/components/primitives/panels/StandardClosedGapsPanel";
-import ChatGap from "@/components/pages/botEventsPage/chatsPanel/ChatGap";
-import AllChatsGap from "@/components/pages/botEventsPage/chatsPanel/AllChatsGap";
+import ChatGap from "@/components/primitives/userHistory/ChatGap";
 import BotEventsPaginationLink from "@/components/pages/botEventsPage/pagination/BotEventsPaginationLink";
 import BotEventsPaginationDots from "@/components/pages/botEventsPage/pagination/BotEventsPaginationDots"
 import BotEventsPageSidebar from "@/components/pages/botEventsPage/primitives/BotEventsPageSidebar";
@@ -118,7 +120,6 @@ export default {
   name: "BotEventsPage",
   components: {
     BotEventsPageSidebar,
-    ClosedGapsPanel,
     PageAdjustedContent,
     IntegorExtraHeader,
     LoadingDisplay,
@@ -127,22 +128,20 @@ export default {
     ItemsList
   },
   mixins: [
-    ErrorContainerMixin
+    ErrorContainerMixin,
+    DisposableEventsMixin
   ],
   data() {
     return {
-      itemComponent: shallowRef(MessageCardWrapper),
-
-      allChatsGapComponent: shallowRef(AllChatsGap),
       chatGapComponent: shallowRef(ChatGap),
+      itemComponent: shallowRef(MessageCardWrapper),
 
       pageComponent: shallowRef(BotEventsPaginationLink),
       pageDotsComponent: shallowRef(BotEventsPaginationDots),
 
       filter: {
         chatId: undefined
-      },
-      recentChats: []
+      }
     }
   },
   computed: {
@@ -153,17 +152,40 @@ export default {
       return this.$route.params.botId
     },
     chatId() {
-      return this.$route.query.chatId
+      return this.$route.query?.chatId
+    },
+    recentChatInfos() {
+      const currentChats = this.$store.getters['history/currentChats']
+
+      if (!currentChats)
+        return undefined
+
+      return currentChats.map(chat => ({chat, bot: this.bot}))
+    },
+    allChatsRoute() {
+      return {
+        name: this.$routeNames.botEvents,
+        params: {
+          botId: this.botId,
+          page: 1
+        }
+      }
     },
     ...mapGetters({
       bot: 'botEvents/bot',
       pagesCount: 'botEvents/pagesCount',
       totalEvents: 'botEvents/totalEvents',
       messages: 'botEvents/messages',
-      appliedFilter: 'botEvents/filter'
+      appliedFilter: 'botEvents/filter',
     })
   },
   methods: {
+    createChatNavigationOptions(chatInfo) {
+      return {
+        removeChatEvent: this.$appEvents.history.chatGapClosed,
+        current: chatInfo.chat.id == this.chatId
+      }
+    },
     createPageOptions() {
       return {
         botId: this.botId,
@@ -185,6 +207,12 @@ export default {
       )
 
       return this.errors.nonExistentBot || this.errors.wrongPageIndex
+    },
+    closeChatGap(chat) {
+      if (this.chatId == chat.id)
+          this.$router.push(this.allChatsRoute)
+
+      this.$store.dispatch('history/removeChatFromCurrent', chat.id)
     },
     async refreshData(botId, pageIndex, filter) {
       // TODO wrong page id
@@ -212,33 +240,18 @@ export default {
         throw error
       }
 
-        await this.load({
-          botId,
-          pageIndex,
-          filter
-        })
+      this.$store.dispatch('history/addBot', this.bot)
+      this.$store.dispatch('history/setCurrentBot', this.bot.id)
+
+      if (!this.appliedFilter.chat)
+        return
+
+      this.$store.dispatch('history/addChatToCurrent', this.appliedFilter.chat)
     },
     getRouteFilterData() {
       return {
         chatId: this.$route.query.chatId
       }
-    },
-    getRecentChat(id) {
-      return this.recentChats.find(chatInfo => chatInfo.chat.id == id)
-    },
-    async removeRecentChat(id) {
-      const chatIndex = this.getRecentChat(id)
-
-      if (chatIndex == -1)
-        return
-
-      this.recentChats.splice(chatIndex, 1)
-
-      if(this.chatId == id)
-        await this.$router.push({
-          ...this.$route,
-          query: {}
-        })
     },
     ...mapActions({
       discard: 'botEvents/discard',
@@ -251,40 +264,21 @@ export default {
       if (to.name != this.$routeNames.botEvents)
         return
 
+      this.$store.dispatch('history/closeCurrentBot', this.bot.id)
+
       this.filter = this.getRouteFilterData()
 
       await this.discard()
       await this.refreshData(this.botId, this.pageIndex, this.filter)
 
       window.scrollTo(0, 0)
-    },
-    appliedFilter(newFilter) {
-      if (!newFilter.chat)
-        return;
-
-      if (this.getRecentChat(newFilter.chat.id))
-        return
-
-      const recentChats = this.recentChats
-
-      recentChats.unshift({
-        botId: this.botId,
-        chat: newFilter.chat,
-        filter: this.appliedFilter
-      })
-
-      if (recentChats.length > this.$appConfiguration.botEvents.maxRecentChats)
-        recentChats.pop()
     }
   },
   async created() {
-    this.$emitter.on(this.$appEvents.botEvents.chatGapClosed, this.removeRecentChat)
+    this.registerEvent(this.$appEvents.history.chatGapClosed, this.closeChatGap, this)
 
     this.filter = this.getRouteFilterData()
     await this.refreshData(this.botId, this.pageIndex, this.filter)
-  },
-  unmounted() {
-    this.$emitter.off(this.$appEvents.botEvents.chatGapClosed)
   }
 }
 </script>
@@ -296,6 +290,8 @@ export default {
 
 @import "/src/assets/scss/patterns/contentAdjustment";
 @import "/src/assets/scss/controls/buttons";
+
+@import "/src/assets/scss/projectSpecific/navigationGaps";
 
 $sidebar-width: 340px;
 $sidebar-top-position: $border-radius * 2 + $page-vertical-gap;
@@ -363,6 +359,23 @@ $sidebar-top-position: $border-radius * 2 + $page-vertical-gap;
 
 .user-action {
   @include button();
+}
+
+.recent-chats-menu {
+  display: flex;
+  margin: 0 (-$border-radius);
+}
+
+.all-chats-link {
+  @extend %nav-gap;
+
+  &.current {
+    @extend %current-nav-gap;
+  }
+
+  a {
+    @extend %nav-gap-title;
+  }
 }
 
 </style>

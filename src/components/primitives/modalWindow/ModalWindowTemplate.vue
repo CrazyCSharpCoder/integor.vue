@@ -21,7 +21,7 @@ export default {
 
 .modal-window-mount {
   position: fixed;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
 
   width: 100%;
   height: 100%;
@@ -34,10 +34,12 @@ export default {
   z-index: 10;
   top: 0;
   left: 0;
+
+  backdrop-filter: blur(4px);
 }
 
 .modal-window-container {
-  box-shadow: 0 0 24px -12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 24px -12px rgba(0, 0, 0, 1);
 }
 
 .closed {

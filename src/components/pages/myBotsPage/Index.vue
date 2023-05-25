@@ -2,10 +2,17 @@
   <div class="my-bots-page">
     <loading-display v-if="!myBots"/>
     <template v-else>
-      <integor-extra-header>
+      <integor-extra-header v-if="recentBots && recentBots.length">
         <page-adjusted-content>
-<!--          TODO add bot gaps-->
-          Content
+          <div class="recent-bots-menu">
+            <items-list
+                :horizontal="true"
+
+                :item-component="botHistoryComponent"
+                :items="recentBots"
+                :options-factory="createBotNavigationOptions"
+            />
+          </div>
         </page-adjusted-content>
       </integor-extra-header>
       <information-display v-if="myBots.length === 0"
@@ -38,6 +45,10 @@ import {mapGetters} from 'vuex'
 import {shallowRef} from "vue";
 
 import BotCard from "@/components/pages/myBotsPage/primitives/BotCard";
+import BotGap from "@/components/primitives/userHistory/BotGap";
+
+import DisposableEventsMixin from "@/components/mixins/DisposableEventsMixin";
+
 import CardsList from "@/components/primitives/controls/CardsList";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
@@ -46,10 +57,12 @@ import InformationDisplay from "@/components/primitives/informationDisplay/Infor
 import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
 import UpdateBotModalWindow from "@/components/pages/myBotsPage/modalWindows/UpdateBotModalWindow";
 import ArchiveBotModalWindow from "@/components/pages/myBotsPage/modalWindows/ArchiveBotModalWindow";
+import ItemsList from "@/components/primitives/controls/ItemsList";
 
 export default {
   name: 'MyBotsPage',
   components: {
+    ItemsList,
     ArchiveBotModalWindow,
     UpdateBotModalWindow,
     LoadingDisplay,
@@ -59,15 +72,22 @@ export default {
     IntegorExtraHeader,
     CardsList
   },
+  mixins: [
+    DisposableEventsMixin
+  ],
   data() {
     return {
-      cardComponent: shallowRef(BotCard)
+      cardComponent: shallowRef(BotCard),
+      botHistoryComponent: shallowRef(BotGap)
     }
   },
   computed: {
     ...mapGetters([
         'myBots'
-    ])
+    ]),
+    ...mapGetters({
+      recentBots: 'history/bots'
+    })
   },
   methods: {
     openAddBotModalWindow() {
@@ -78,9 +98,22 @@ export default {
         updateBotEvent: this.$appEvents.bots.openUpdateBotModalWindow,
         archiveBotEvent: this.$appEvents.bots.openArchiveBotModalWindow
       }
+    },
+    createBotNavigationOptions() {
+      return {
+        removeBotEvent: this.$appEvents.history.botGapClosed
+      }
+    },
+    closeBotNavigationGap(bot) {
+      this.$store.dispatch('history/removeBot', bot.id)
     }
   },
   async created() {
+    this.registerEvent(
+        this.$appEvents.history.botGapClosed,
+        this.closeBotNavigationGap
+    )
+
     await this.$store.dispatch('loadBots')
   }
 }
@@ -118,6 +151,10 @@ export default {
 
 .add-bot {
   @include button();
+}
+
+.recent-bots-menu {
+  margin: 0 (-$border-radius);
 }
 
 </style>
