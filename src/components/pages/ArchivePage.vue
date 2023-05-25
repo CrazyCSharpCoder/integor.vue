@@ -9,7 +9,12 @@
         <template #description>
           Добавляйте в архив ботов, которые больше
           не используются Вами, чтобы они не занимали места в
-          <router-link :to="{name: $routeNames.bots}">Cписке Ваших ботов</router-link>
+          <router-link
+              :to="{name: $routeNames.bots}"
+              class="bots-page-link"
+          >
+            Cписке Ваших ботов
+          </router-link>
         </template>
       </information-display>
       <section class="archive-page-content">
@@ -83,6 +88,7 @@ export default {
 <style scoped lang="scss">
 
 @import '/src/assets/scss/patterns/contentAdjustment';
+@import '/src/assets/scss/controls/buttons';
 
 .archive-page {
   @extend %full-page-content;
@@ -90,6 +96,10 @@ export default {
 
 .archive-page-content {
   @extend %page-content
+}
+
+.bots-page-link {
+  @extend %inline-link;
 }
 
 </style>

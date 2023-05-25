@@ -40,7 +40,7 @@ export default {
 
 @import "/src/assets/scss/projectSpecific/header";
 
-$items-gap: $padding-step-large * 2;
+$items-gap: $padding-step-large * 4;
 $separator-size: 18px;
 
 .bots-navigation-container {
