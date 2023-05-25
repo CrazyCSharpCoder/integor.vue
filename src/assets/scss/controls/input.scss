@@ -38,3 +38,16 @@ $input-border-width: 2px;
     }
   }
 }
+
+@mixin textarea(
+  $border-color: $color-2-shade-1,
+  $border-focus-color: $color-2-shade-2
+) {
+  @include input($border-color, $border-focus-color);
+
+  line-height: inherit;
+  resize: none;
+
+  width: 100%;
+  height: 100%;
+}

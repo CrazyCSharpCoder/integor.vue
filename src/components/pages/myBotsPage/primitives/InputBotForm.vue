@@ -15,6 +15,13 @@
           {{outputFirst(v$.input.token)}}
         </div>
       </div>
+      <div class="form-item description">
+        <textarea v-model="input.description" placeholder="Описание"
+               :class="['input', {error: descriptionInvalid}]"/>
+        <div v-if="descriptionInvalid" class="input-error">
+          {{outputFirst(v$.input.description)}}
+        </div>
+      </div>
       <div class="form-item form-controls">
         <button class="confirm">Подтвердить</button>
       </div>
@@ -53,6 +60,9 @@ export default {
     },
     tokenInvalid() {
       return Boolean(this.errorsCount(this.v$.input.token))
+    },
+    descriptionInvalid() {
+      return Boolean(this.errorsCount(this.v$.input.description))
     }
   },
   validations() {
@@ -78,6 +88,12 @@ export default {
           isTelegramToken: helpers.withMessage(
               'Значение не является токеном Telegram бота',
               () => this.$appConfiguration.validation.bots.token(this.input.token)
+          )
+        },
+        description: {
+          validDescription: helpers.withMessage(
+              'Описание содержит недопустимые символы',
+              () => this.$appConfiguration.validation.bots.description(this.input.description)
           )
         }
       }
@@ -106,15 +122,23 @@ export default {
       @extend %list-item;
 
       .input {
-        @include input();
         width: 100%;
 
         &.error {
           @extend %error-input;
         }
       }
+      input.input {
+        @include input();
+      }
+      textarea.input {
+        @include textarea();
+        height: 120px;
+      }
+
       .input-error {
         @extend %form-error;
+
         padding-left: $border-radius + 2px;
       }
     }

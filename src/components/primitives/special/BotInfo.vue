@@ -9,8 +9,9 @@
     <div class="bot-info-item bot-token">
       <hidden-data-display :data="bot.token" placeholder="Токен бота"/>
     </div>
-    <div class="bot-info-item bot-description">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt dolorum minus numquam possimus quae, reprehenderit vel? Aliquam animi deleniti doloremque dolores, earum expedita illo iure minima nemo nihil quam, qui.
+    <div :class="['bot-info-item', 'bot-description', {blank: !bot.description}]">
+      <template v-if="bot.description">{{bot.description}}</template>
+      <template v-else>Бот не имеет описания</template>
     </div>
   </div>
 </template>
@@ -47,6 +48,11 @@ $info-items-padding: $padding-step-large;
 
 .bot-info {
   margin: -$info-items-padding 0;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
 }
 
 .bot-info-header {
@@ -74,6 +80,15 @@ $info-items-padding: $padding-step-large;
 
 .bot-token{
   @extend %controls-container;
+}
+
+
+.bot-description {
+  flex-grow: 1;
+
+  &.blank {
+    font-style: italic;
+  }
 }
 
 </style>

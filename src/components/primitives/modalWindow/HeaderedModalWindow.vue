@@ -1,6 +1,6 @@
 <template>
   <modal-window-template :active="active">
-    <section class="modal-window">
+    <section :style="width ? {width} : undefined" class="modal-window">
       <div class="modal-window-header">
         <div class="header-content-container">
           <slot name="header"></slot>
@@ -29,7 +29,8 @@ export default {
     active: {
       type: Boolean,
       default: false
-    }
+    },
+    width: String
   },
   methods: {
     onClosed() {

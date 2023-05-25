@@ -21,7 +21,6 @@
       </template>
       <template v-else>
         <li v-if="options?.unarchiveBotEvent" class="bot-card-controls-item">
-          <!--          TODO add handler-->
           <button @click="onUnarchive" class="bot-card-button unarchive-bot">Разархивировать</button>
         </li>
       </template>
@@ -75,6 +74,15 @@ $controls-gap: $padding-step * 2;
   padding: $page-section-vertical-gap $page-section-horizontal-gap;
 
   background: $color-1-shade-3;
+
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.bot-info-container {
+  flex-grow: 1;
 }
 
 .bot-card-controls {

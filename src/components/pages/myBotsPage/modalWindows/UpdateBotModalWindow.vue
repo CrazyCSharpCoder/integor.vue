@@ -1,7 +1,9 @@
 <template>
   <headered-modal-window v-if="context"
                          :active="isActive"
-                         :on-close-clicked="$appEvents.bots.closeUpdateBotModalWindow">
+                         :on-close-clicked="$appEvents.bots.closeUpdateBotModalWindow"
+                         width="300px"
+  >
     <template #header>
       <div class="update-bot-header-container">Обновить бота "{{context.title}}"</div>
     </template>
