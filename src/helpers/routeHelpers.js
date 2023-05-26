@@ -2,6 +2,9 @@ function equalObjectsShallow(a, b) {
     if (!a && !b)
         return true
 
+    if (!a || !b)
+        return false
+
     const entriesA = Object.entries(a)
     const entriesB = Object.entries(b)
 

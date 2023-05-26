@@ -310,17 +310,27 @@ export default {
       if (this.filter)
         route.query = this.filter.chatId
 
-      await this.$router.push(route)
+      if (!this.$routeHelpers.sameRoutes(this.$route, route))
+        await this.$router.push(route)
+
+      this.tryScrollToMessage()
     },
     tryScrollToMessage() {
       const hash = this.$routeHelpers.parseHash(
           this.$route.hash
       )
 
+      if (!hash)
+        return null
+
       if (!this.$special.botEventsHelpers.isMessageHtmlId(hash))
         return null
 
       const targetElement = document.getElementById(hash)
+
+      if (!targetElement)
+        return null
+
       targetElement.scrollIntoView({block: 'center'})
 
       return targetElement
