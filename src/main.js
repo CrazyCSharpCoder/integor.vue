@@ -15,6 +15,8 @@ import formHelpers from "@/plugins/formHelpers";
 import api from "@/plugins/api";
 import collectionHelpers from "@/plugins/collectionHelpers";
 import dateFormattingHelpers from "@/plugins/dateFormattingHelpers";
+import routeHelpers from "@/plugins/routeHelpers";
+import special from "@/plugins/special";
 
 const app = createApp(App)
 
@@ -30,7 +32,9 @@ const plugins = [
     formHelpers,
     api,
     collectionHelpers,
-    dateFormattingHelpers
+    dateFormattingHelpers,
+    routeHelpers,
+    special
 ]
 
 for (let plugin of plugins)

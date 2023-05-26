@@ -1,93 +1,36 @@
 <template>
-  <section class="message-card">
-    <div class="message-info">
-      <div class="info-row title">
-        <div class="info-attribute">Chat id: {{chat.id}}</div>
-        <div class="info-attribute">Message id: {{item.messageId}}</div>
-      </div>
-      <div class="message-info-group message-date">
-        <div class="info-attribute">
-          <span class="attribute-name">Время отправления:</span>
-          {{this.$dateFormat.formatStringDateTime(item.date)}}
-        </div>
-      </div>
-      <div class="message-info-group sender-info">
-        <div class="title">
-          Отправитель
-        </div>
-        <div class="info-row">
-          <div class="info-attribute">
-            <span class="attribute-name">Id:</span>
-            {{from.id}}
-          </div>
-          <div class="info-attribute">
-            <span class="attribute-name">Is bot:</span>
-            {{from.isBot}}
-          </div>
-        </div>
-        <div class="info-row">
-          <div class="info-attribute">
-            <span class="attribute-name">First name:</span>
-            {{from.firstName}}
-          </div>
-          <div v-if="from.lastName" class="info-attribute">
-            <span class="attribute-name">Last name:</span>
-            {{from.lastName}}
-          </div>
-        </div>
-      </div>
-      <div class="message-info-group chat-info">
-        <div class="title">
-          Чат
-        </div>
-        <div class="info-row">
-          <div class="info-attribute">
-            <span class="attribute-name">Id:</span>
-            {{chat.id}}</div>
-          <div class="info-attribute">
-            <span class="attribute-name">Type:</span>
-            {{chat.type}}
-          </div>
-        </div>
-        <div class="info-row">
-          <div class="info-attribute">
-            <span class="attribute-name">First name:</span>
-            {{chat.firstName}}
-          </div>
-          <div v-if="chat.lastName" class="info-attribute">
-            <span class="attribute-name">Last name:</span>
-            {{chat.lastName}}
-          </div>
-        </div>
-      </div>
-      <div v-if="options?.hasOpenChatButton" class="controls">
-        <router-link class="action" :to="{
+  <section :id="htmlId" class="message-card">
+    <section :class="['message-card-section', 'message-info-section', {'with-reply': Boolean(replyToMessage)}]">
+      <message-info :message="item">
+        <template v-if="options?.hasOpenChatButton" #controls>
+          <router-link class="go-to-chat" :to="{
             name: $routeNames.botEvents,
             params: {page: 1},
             query: {chatId: chat.id}
           }">
-          Перейти к чату
-        </router-link>
-      </div>
-    </div>
-    <div class="separator"></div>
-    <div class="message-content-info">
-      <div class="info-row info-attribute">
-        <!--        TODO display real value-->
-        <span class="attribute-name">Вложения:</span>&nbsp;сообщение не имеет вложений
-      </div>
-      <div class="message-info-group">
-        <div class="title">Текст сообщения</div>
-        <div class="message-text">
-          {{item.text}}
-        </div>
-      </div>
-    </div>
+            Перейти к чату
+          </router-link>
+        </template>
+      </message-info>
+    </section>
+    <section v-if="replyToMessage" class="message-card-section reply-to-message-section">
+      <message-info :message="replyToMessage">
+        <template #header>
+          <div class="message-section-title">В ответ на сообщение</div>
+        </template>
+        <template v-if="options?.goToRepliedMessageEvent" #controls>
+          <button @click="goToMessage" class="go-to-message">Перейти к сообщению</button>
+        </template>
+      </message-info>
+    </section>
   </section>
 </template>
 
 <script>
+import MessageInfo from "@/components/pages/botEventsPage/primitives/MessageInfo";
+
 export default {
+  components: {MessageInfo},
   props: {
     item: {
       required: true,
@@ -101,6 +44,21 @@ export default {
     },
     from() {
       return this.item.from
+    },
+    replyToMessage() {
+      return this.item.replyToMessage
+    },
+    htmlId() {
+      return this.$special.botEventsHelpers
+          .createMessageHtmlId(
+              this.chat.id,
+              this.item.messageId
+          )
+    }
+  },
+  methods: {
+    goToMessage() {
+      this.$emitter.emit(this.options.goToRepliedMessageEvent, this.replyToMessage)
     }
   }
 }
@@ -120,70 +78,72 @@ export default {
 @import "/src/assets/scss/controls/buttons";
 
 $grouped-items-padding: $padding-step;
+$highlight-duration: 2s;
 
-.message-card {
-  display: flex;
-  justify-content: stretch;
-  align-items: stretch;
-
-  background: $color-1-shade-3;
-  color: $color-1-text;
-
-  border-radius: $border-radius-large;
-
-  padding: $page-section-vertical-gap $page-section-horizontal-gap;
-
-  .message-info {
-    flex: 0 0 300px;
+@keyframes pulse-background-message {
+  0% {
+    background: $color-2-shade-1;
   }
-  .separator {
-    @include separator-vertical();
-  }
-
-  .message-info, .message-content-info {
-    @include panel($padding-step * 5);
-
-    flex-direction: column;
-  }
-
-  @media (max-width: $large-threshold) {
-    flex-direction: column;
-
-    .message-info {
-      flex-basis: 0;
-    }
-
-    .separator {
-      @include separator-horizontal();
-    }
+  100% {
+    background: $color-1-shade-3;
   }
 }
 
-.title {
+@keyframes pulse-background-message-reply {
+  0% {
+    background: $color-2-shade-1;
+  }
+  100% {
+    background: $color-1-shade-2;
+  }
+}
+
+.message-card-section {
+  border-radius: $border-radius-large;
+  padding: $page-section-vertical-gap $page-section-horizontal-gap;
+}
+
+.message-section-title {
+  font-size: $h3-font-size;
   font-weight: $bold;
 }
 
-.message-info-group {
-  @include panel($padding-step * 2);
-  flex-direction: column;
-}
+.message-info-section {
+  background: $color-1-shade-3;
+  color: $color-1-text;
 
-.info-row {
-  @include breadcrumbs();
-
-  .info-attribute {
-    @extend %breadcrumbs-item;
+  &.with-reply {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
   }
 }
 
-.info-attribute {
-  .attribute-name {
-    font-weight: $bold;
+.reply-to-message-section {
+  background: $color-1-shade-2;
+  color: $color-1-text;
+
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+
+  border-top: 1px solid rgba($color-contrast, 0.5);
+}
+
+.highlight {
+  .message-info-section {
+    animation: pulse-background-message $highlight-duration;
+  }
+  .reply-to-message-section {
+    animation: pulse-background-message-reply $highlight-duration;
   }
 }
 
-.action {
+.go-to-chat {
   @extend %primary-button;
+}
+
+.go-to-message {
+  @extend %secondary-button;
+  width: 100%;
 }
 
 </style>

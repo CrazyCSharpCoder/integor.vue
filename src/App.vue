@@ -29,6 +29,8 @@ html {
 
   display: flex;
   flex-direction: column;
+
+  scroll-behavior: smooth;
 }
 
 body {

@@ -104,6 +104,8 @@
 import {mapGetters, mapActions} from "vuex";
 import {shallowRef} from "vue";
 
+import {sameRoutes} from "@/helpers/routeHelpers";
+
 import {ServerError} from "@/errorHandling/serverErrors";
 
 import ErrorContainerMixin from "@/components/mixins/ErrorContainerMixin";
@@ -121,6 +123,15 @@ import BotEventsPaginationLink from "@/components/pages/botEventsPage/pagination
 import BotEventsPaginationDots from "@/components/pages/botEventsPage/pagination/BotEventsPaginationDots"
 import BotEventsPageSidebar from "@/components/pages/botEventsPage/primitives/BotEventsPageSidebar";
 import UpdateBotModalWindow from "@/components/pages/myBotsPage/modalWindows/UpdateBotModalWindow";
+
+function sameRouteWithoutHash(a, b) {
+  const aCopy = Object.assign({}, a)
+  const bCopy = Object.assign({}, b)
+
+  aCopy.hash = bCopy.hash = null
+
+  return sameRoutes(aCopy, bCopy)
+}
 
 export default {
   name: "BotEventsPage",
@@ -162,7 +173,7 @@ export default {
       return this.$route.query?.chatId
     },
     recentChatInfos() {
-      const currentChats = this.$store.getters['history/currentChats']
+      const currentChats = this.currentChats
 
       if (!currentChats)
         return undefined
@@ -185,6 +196,8 @@ export default {
       totalEvents: 'botEvents/totalEvents',
       messages: 'botEvents/messages',
       appliedFilter: 'botEvents/filter',
+
+      currentChats: 'history/currentChats'
     })
   },
   methods: {
@@ -202,7 +215,8 @@ export default {
     },
     createMessageOptions() {
       return {
-        hasOpenChatButton: !this.chatId
+        hasOpenChatButton: !this.chatId,
+        goToRepliedMessageEvent: this.$appEvents.botEvents.goToMessage
       }
     },
     async handleServerError(error) {
@@ -220,7 +234,7 @@ export default {
       if (this.chatId == chat.id)
           this.$router.push(this.allChatsRoute)
 
-      this.$store.dispatch('history/removeChatFromCurrent', chat.id)
+      this.removeChatGap(chat.id)
     },
     async refreshData(botId, pageIndex, filter) {
       // TODO wrong page id
@@ -248,22 +262,84 @@ export default {
         throw error
       }
 
-      this.$store.dispatch('history/addBot', this.bot)
-      this.$store.dispatch('history/setCurrentBot', this.bot.id)
+      this.addBotGap(this.bot)
+      this.setCurrentBot(this.bot.id)
 
       if (!this.appliedFilter.chat)
         return
 
-      this.$store.dispatch('history/addChatToCurrent', this.appliedFilter.chat)
+      this.addChatGap(this.appliedFilter.chat)
     },
     getRouteFilterData() {
       return {
         chatId: this.$route.query.chatId
       }
     },
+    async goToMessage(message) {
+      let pageIndex
+
+      try {
+        pageIndex = await this.getMessagePageIndex({
+          botId: this.botId,
+
+          chatId: message.chat.id,
+          messageId: message.messageId,
+
+          filter: this.filter
+        })
+      }
+      catch (error) {
+        // TODO notify user
+        return
+      }
+
+      const messageHtmlId = this.$special.botEventsHelpers
+          .createMessageHtmlId(
+              message.chat.id, message.messageId
+          )
+
+      const route = {
+        name: this.$routeNames.botEvents,
+        params: {
+          botId: this.botId,
+          page: pageIndex + 1
+        },
+        hash: `#${messageHtmlId}`
+      }
+
+      if (this.filter)
+        route.query = this.filter.chatId
+
+      await this.$router.push(route)
+    },
+    tryScrollToMessage() {
+      const hash = this.$routeHelpers.parseHash(
+          this.$route.hash
+      )
+
+      if (!this.$special.botEventsHelpers.isMessageHtmlId(hash))
+        return null
+
+      const targetElement = document.getElementById(hash)
+      targetElement.scrollIntoView({block: 'center'})
+
+      return targetElement
+    },
+    highlightMessage(htmlElement) {
+      htmlElement.classList.add('highlight')
+    },
     ...mapActions({
       discard: 'botEvents/discard',
-      load: 'botEvents/load'
+      load: 'botEvents/load',
+
+      addBotGap: 'history/addBot',
+      setCurrentBot: 'history/setCurrentBot',
+      closeCurrentBot: 'history/closeCurrentBot',
+
+      addChatGap: 'history/addChatToCurrent',
+      removeChatGap: 'history/removeChatFromCurrent',
+
+      getMessagePageIndex: 'botEvents/getMessagePageIndex'
     })
   },
   watch: {
@@ -272,21 +348,36 @@ export default {
       if (to.name != this.$routeNames.botEvents)
         return
 
-      this.$store.dispatch('history/closeCurrentBot', this.bot.id)
+      if (!sameRouteWithoutHash(to, from)) {
+        this.closeCurrentBot(this.bot.id)
 
-      this.filter = this.getRouteFilterData()
+        this.filter = this.getRouteFilterData()
 
-      await this.discard()
-      await this.refreshData(this.botId, this.pageIndex, this.filter)
+        await this.discard()
+        await this.refreshData(this.botId, this.pageIndex, this.filter)
+      }
 
-      window.scrollTo(0, 0)
+      const scrolledMessage = this.tryScrollToMessage()
+
+      if (!scrolledMessage) {
+        window.scrollTo(0, 0)
+      }
+      else {
+        this.highlightMessage(scrolledMessage)
+      }
     }
   },
   async created() {
     this.registerEvent(this.$appEvents.history.chatGapClosed, this.closeChatGap, this)
+    this.registerEvent(this.$appEvents.botEvents.goToMessage, this.goToMessage, this)
 
     this.filter = this.getRouteFilterData()
     await this.refreshData(this.botId, this.pageIndex, this.filter)
+
+    const messageElement = this.tryScrollToMessage()
+
+    if (messageElement)
+      this.highlightMessage(messageElement)
   }
 }
 </script>
@@ -349,10 +440,15 @@ $sidebar-top-position: $border-radius * 2 + $page-vertical-gap;
   position: sticky;
   bottom: $padding-step;
 
+  margin-left: auto;
+  margin-right: auto;
+
   display: flex;
   justify-content: center;
 
   margin-top: $page-vertical-gap;
+
+  width: fit-content;
 
   .pagination-background {
     border-top-left-radius: $border-radius-large;

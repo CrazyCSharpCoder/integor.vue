@@ -2,6 +2,12 @@ import api from "@/api";
 
 const pageSize = 20
 
+function filterToBody(filter) {
+    return  Object.fromEntries(
+        Object.entries(filter).filter(entry => entry[1] !== undefined)
+    )
+}
+
 export default {
     namespaced: true,
 
@@ -76,9 +82,7 @@ export default {
         async load({commit}, {botId, pageIndex, filter}) {
             const startIndex = pageIndex * pageSize
 
-            filter = Object.fromEntries(
-                Object.entries(filter).filter(entry => entry[1] !== undefined)
-            )
+            filter = filterToBody(filter)
 
             const botEventsInfo = await api.botEvents.getEvents(
                 botId, startIndex, pageSize, filter
@@ -103,6 +107,19 @@ export default {
             commit('SET_BOT', updateResult.bot)
 
             return bot
+        },
+        async getMessagePageIndex(
+            context, {botId, chatId, messageId, filter}
+        )
+        {
+            filter = filterToBody(filter)
+
+            const response = await api.botEvents.getMessagePageIndex(
+                botId, chatId, messageId,
+                pageSize, filter
+            )
+
+            return response.value
         }
     }
 }
