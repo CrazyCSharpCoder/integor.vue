@@ -14,6 +14,7 @@ import appEvents from "@/plugins/appEvents";
 import formHelpers from "@/plugins/formHelpers";
 import api from "@/plugins/api";
 import collectionHelpers from "@/plugins/collectionHelpers";
+import dateFormattingHelpers from "@/plugins/dateFormattingHelpers";
 
 const app = createApp(App)
 
@@ -28,7 +29,8 @@ const plugins = [
     appEvents,
     formHelpers,
     api,
-    collectionHelpers
+    collectionHelpers,
+    dateFormattingHelpers
 ]
 
 for (let plugin of plugins)

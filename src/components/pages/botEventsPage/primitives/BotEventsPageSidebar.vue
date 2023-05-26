@@ -21,7 +21,7 @@
             </div>
             <div class="additional-webhook-info set-date">
               <div class="value">
-                {{webhookMeta.created_date}}
+                {{$dateFormat.formatDate(webhookCreatedDate)}}
               </div>
               <div class="label">Активен с</div>
             </div>
@@ -55,10 +55,18 @@ export default {
   },
   computed: {
     webhookMeta() {
-      return this.webhookInfo.meta
+      return this.webhookInfo?.meta
     },
     telegramWebhook() {
-      return this.webhookInfo.telegram_webhook
+      return this.webhookInfo?.telegram_webhook
+    },
+    webhookCreatedDate() {
+      const rawValue = this.webhookMeta?.created_date
+
+      if (!rawValue)
+        return undefined
+
+      return  this.$dateFormat.parseUnixDateTime(rawValue)
     }
   },
   methods: {

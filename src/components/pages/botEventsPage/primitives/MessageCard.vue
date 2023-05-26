@@ -5,6 +5,12 @@
         <div class="info-attribute">Chat id: {{chat.id}}</div>
         <div class="info-attribute">Message id: {{item.messageId}}</div>
       </div>
+      <div class="message-info-group message-date">
+        <div class="info-attribute">
+          <span class="attribute-name">Время отправления:</span>
+          {{this.$dateFormat.formatStringDateTime(item.date)}}
+        </div>
+      </div>
       <div class="message-info-group sender-info">
         <div class="title">
           Отправитель
