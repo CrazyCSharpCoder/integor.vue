@@ -4,7 +4,7 @@
     <template v-else>
       <information-display v-if="bots.length === 0"
                            :image-ref="require('@/assets/icons/empty-result.svg')"
-                           title="В архиве нет ни одного бота"
+                           title="В архив не добавлено ни одного бота"
       >
         <template #description>
           Добавляйте в архив ботов, которые больше
