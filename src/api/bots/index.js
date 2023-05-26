@@ -18,7 +18,6 @@ export default {
         })
     },
     async updateBot(bot) {
-        console.log(bot)
         const url = http.domain + prefix + bot.id
 
         return await handle(url, {

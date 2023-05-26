@@ -61,8 +61,6 @@ export default {
         await this.$store.dispatch('archive', this.bot.id)
       }
       catch (error) {
-        console.log(error)
-
         const errorMessage = this.createErrorMessage(error)
         this.setTheError(errorMessage)
 

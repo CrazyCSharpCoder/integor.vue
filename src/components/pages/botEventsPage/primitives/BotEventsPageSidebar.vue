@@ -6,28 +6,34 @@
         <button @click="onUpdate" class="update-bot">Изменить</button>
       </div>
     </section>
-    <div class="separator"></div>
-    <section class="bot-webhook-info">
-      <div class="webhook-info-item title">Webhook</div>
-<!--      TODO paste the real URL-->
-      <div class="webhook-info-item webhook-url">https://72a3-193-218-138-71.eu.ngrok.io/bot</div>
-      <div class="webhook-info-item additional-webhook-infos">
-        <div class="additional-webhook-info max-connections">
-          <div class="value">
-<!--            TODO paste real value-->
-            30
+    <template v-if="webhookInfo">
+      <div class="separator"></div>
+      <section class="bot-webhook-info">
+        <div class="webhook-info-item title">Webhook</div>
+        <template v-if="webhookInfo.is_set">
+          <div class="webhook-info-item webhook-url">{{webhookMeta.url}}</div>
+          <div class="webhook-info-item additional-webhook-infos">
+            <div class="additional-webhook-info max-connections">
+              <div class="value">
+                {{telegramWebhook.max_connections}}
+              </div>
+              <div class="label">Макс. соединений</div>
+            </div>
+            <div class="additional-webhook-info set-date">
+              <div class="value">
+                {{webhookMeta.created_date}}
+              </div>
+              <div class="label">Активен с</div>
+            </div>
           </div>
-          <div class="label">Макс. соединений</div>
-        </div>
-        <div class="additional-webhook-info set-date">
-          <div class="value">
-            <!--            TODO paste real value-->
-            24.05.2022
+        </template>
+        <template v-else>
+          <div class="webhook-info-item">
+            Webhook для данного бота не установлен
           </div>
-          <div class="label">Активен с</div>
-        </div>
-      </div>
-    </section>
+        </template>
+      </section>
+    </template>
   </aside>
 </template>
 
@@ -44,6 +50,15 @@ export default {
     totalEvents: {
       required: true,
       type: Number
+    },
+    webhookInfo: Object
+  },
+  computed: {
+    webhookMeta() {
+      return this.webhookInfo.meta
+    },
+    telegramWebhook() {
+      return this.webhookInfo.telegram_webhook
     }
   },
   methods: {

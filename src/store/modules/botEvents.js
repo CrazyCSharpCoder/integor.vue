@@ -8,9 +8,13 @@ export default {
     state() {
         return {
             bot: undefined,
+            webhookInfo: undefined,
+
             totalEvents: undefined,
             filteredEvents: undefined,
+
             messages: undefined,
+
             filter: undefined
         }
     },
@@ -18,6 +22,10 @@ export default {
         bot(state) {
             return state.bot
         },
+        webhookInfo(state) {
+            return state.webhookInfo
+        },
+
         totalEvents(state) {
             return state.totalEvents
         },
@@ -35,8 +43,16 @@ export default {
         }
     },
     mutations: {
-        SET_INFO(state, {bot, totalEvents, filteredEvents, messages, filter}) {
+        SET_INFO(state, {
+            bot,
+            totalEvents,
+            filteredEvents,
+            messages,
+            filter,
+            webhookInfo
+        }) {
             state.bot = bot
+            state.webhookInfo = webhookInfo
 
             state.totalEvents = totalEvents
             state.filteredEvents = filteredEvents
@@ -49,7 +65,8 @@ export default {
             state.bot = bot
         },
         DISCARD(state) {
-            state.bot = state.totalEvents = state.messages = undefined
+            Object.keys(state)
+                .forEach(key => state[key] = undefined)
         }
     },
     actions: {
@@ -66,13 +83,17 @@ export default {
             const botEventsInfo = await api.botEvents.getEvents(
                 botId, startIndex, pageSize, filter
             )
+            const webhookInfo = await api.webhook.getWebhookInfo(
+                botEventsInfo.bot.token
+            )
 
             commit('SET_INFO', {
                 bot: botEventsInfo.bot,
                 totalEvents: botEventsInfo.totalEvents,
                 filteredEvents: botEventsInfo.filteredEvents,
                 messages: botEventsInfo.messages,
-                filter: botEventsInfo.filter
+                filter: botEventsInfo.filter,
+                webhookInfo
             })
 
             return botEventsInfo

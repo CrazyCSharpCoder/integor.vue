@@ -72,7 +72,11 @@
             </div>
             <div class="sidebar-container">
               <div class="sidebar-sticky-container">
-                <bot-events-page-sidebar :bot="bot" :total-events="totalEvents"/>
+                <bot-events-page-sidebar
+                    :bot="bot"
+                    :total-events="totalEvents"
+                    :webhook-info="webhook"
+                />
               </div>
             </div>
           </div>
@@ -176,6 +180,7 @@ export default {
     },
     ...mapGetters({
       bot: 'botEvents/bot',
+      webhook: 'botEvents/webhookInfo',
       pagesCount: 'botEvents/pagesCount',
       totalEvents: 'botEvents/totalEvents',
       messages: 'botEvents/messages',

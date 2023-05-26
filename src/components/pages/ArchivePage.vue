@@ -61,12 +61,7 @@ export default {
       }
     },
     async unarchiveBot(botInfo) {
-      try {
-        await this.$store.dispatch('archive/unarchive', botInfo.bot.id)
-      }
-      catch (error) {
-        console.log(error)
-      }
+      await this.$store.dispatch('archive/unarchive', botInfo.bot.id)
     },
     ...mapActions({
       load: 'archive/load',
