@@ -308,14 +308,20 @@ export default {
       }
 
       if (this.filter)
-        route.query = this.filter.chatId
+        route.query = {chatId: this.filter.chatId}
 
       if (!this.$routeHelpers.sameRoutes(this.$route, route))
         await this.$router.push(route)
 
-      this.tryScrollToMessage()
+      const messageElement = this.tryScrollToMessage()
+
+      if (messageElement)
+        await this.highlightMessage(messageElement)
     },
     tryScrollToMessage() {
+      if (!this.$route.hash)
+        return null
+
       const hash = this.$routeHelpers.parseHash(
           this.$route.hash
       )
@@ -335,8 +341,17 @@ export default {
 
       return targetElement
     },
-    highlightMessage(htmlElement) {
-      htmlElement.classList.add('highlight')
+    async highlightMessage(htmlElement) {
+      const highlightClass = 'highlight'
+
+      if (htmlElement.classList.contains(highlightClass)) {
+        htmlElement.classList.remove(highlightClass)
+        // Костыль. Пробовал через $nextTick() - не сработало
+        setTimeout(() => htmlElement.classList.add(highlightClass), 100)
+      }
+      else {
+        htmlElement.classList.add(highlightClass)
+      }
     },
     ...mapActions({
       discard: 'botEvents/discard',
