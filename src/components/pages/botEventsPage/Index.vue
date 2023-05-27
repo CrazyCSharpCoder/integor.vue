@@ -276,10 +276,10 @@ export default {
       }
     },
     async goToMessage(message) {
-      let pageIndex
+      let searchResult
 
       try {
-        pageIndex = await this.getMessagePageIndex({
+        searchResult = await this.searchMessage({
           botId: this.botId,
 
           chatId: message.chat.id,
@@ -302,7 +302,7 @@ export default {
         name: this.$routeNames.botEvents,
         params: {
           botId: this.botId,
-          page: pageIndex + 1
+          page: searchResult.pageIndex + 1
         },
         hash: `#${messageHtmlId}`
       }
@@ -310,8 +310,9 @@ export default {
       if (this.filter)
         route.query = {chatId: this.filter.chatId}
 
-      if (!this.$routeHelpers.sameRoutes(this.$route, route))
+      if (!this.$routeHelpers.sameRoutes(this.$route, route)) {
         await this.$router.push(route)
+      }
 
       const messageElement = this.tryScrollToMessage()
 
@@ -364,7 +365,7 @@ export default {
       addChatGap: 'history/addChatToCurrent',
       removeChatGap: 'history/removeChatFromCurrent',
 
-      getMessagePageIndex: 'botEvents/getMessagePageIndex'
+      searchMessage: 'botEvents/searchMessage'
     })
   },
   watch: {

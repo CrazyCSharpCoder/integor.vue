@@ -17,8 +17,8 @@ export default {
             }
         })
     },
-    async getMessagePageIndex(botId, chatId, messageId, pageSize, filter) {
-        const url = domain + prefix + `bot-${botId}` + '/page-index'
+    async searchMessage(botId, chatId, messageId, pageSize, filter) {
+        const url = domain + prefix + `bot-${botId}` + '/search-message'
 
         return await handle(url, {
             method: methods.post,

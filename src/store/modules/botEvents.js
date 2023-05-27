@@ -67,6 +67,9 @@ export default {
 
             state.filter = filter
         },
+        SET_MESSAGES(state, messages) {
+            state.messages = messages
+        },
         SET_BOT(state, bot) {
             state.bot = bot
         },
@@ -108,18 +111,17 @@ export default {
 
             return bot
         },
-        async getMessagePageIndex(
-            context, {botId, chatId, messageId, filter}
-        )
-        {
+        async searchMessage({commit}, {botId, chatId, messageId, filter}) {
             filter = filterToBody(filter)
 
-            const response = await api.botEvents.getMessagePageIndex(
+            const response = await api.botEvents.searchMessage(
                 botId, chatId, messageId,
                 pageSize, filter
             )
 
-            return response.value
+            commit('SET_MESSAGES', response.messages)
+
+            return response
         }
     }
 }
