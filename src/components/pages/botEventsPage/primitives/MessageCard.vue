@@ -1,5 +1,5 @@
 <template>
-  <section :id="htmlId" class="message-card">
+  <section :id="htmlId" :class="['message-card', {'current-bot-message': options?.isCurrentBot}]">
     <section :class="['message-card-section', 'message-info-section', {'with-reply': Boolean(replyToMessage)}]">
       <message-info :message="item">
         <template v-if="options?.hasOpenChatButton" #controls>
@@ -80,6 +80,8 @@ export default {
 $grouped-items-padding: $padding-step;
 $highlight-duration: 2s;
 
+$current-bot-message-border: 2px solid $color-2-shade-1;
+
 @keyframes pulse-background-message {
   0% {
     background: $color-2-shade-1;
@@ -126,6 +128,22 @@ $highlight-duration: 2s;
   border-top-right-radius: 0;
 
   border-top: 1px solid rgba($color-contrast, 0.5);
+}
+
+.message-card.current-bot-message {
+  .message-info-section {
+    border: $current-bot-message-border;
+
+    &.with-reply {
+      border-bottom: none;
+    }
+  }
+
+  .reply-to-message-section {
+    border-left: $current-bot-message-border;
+    border-right: $current-bot-message-border;
+    border-bottom: $current-bot-message-border;
+  }
 }
 
 .highlight {

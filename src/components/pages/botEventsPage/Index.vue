@@ -32,15 +32,6 @@
         </template>
       </information-display>
 
-<!--      Пустой список событий-->
-      <information-display v-else-if="messages.length === 0"
-                           :image-ref="require('@/assets/icons/empty-result.svg')"
-                           title="Не сохранено ни одного события"
-                           description="События будут сохраняться по мере того,
-                           как пользователи будут взаимодействовать с вашим ботом.
-                           Откройте страницу позже"
-      />
-
 <!--      Нет ошибок, есть события-->
       <template v-else>
         <integor-extra-header v-if="recentChatInfos && recentChatInfos.length">
@@ -64,7 +55,14 @@
         <div class="bot-events-page-content-container">
           <div class="bot-events-page-content">
             <div class="bot-events-list-container">
-              <items-list v-if="messages"
+              <information-display v-if="messages.length === 0"
+                                   :image-ref="require('@/assets/icons/empty-result.svg')"
+                                   title="Не сохранено ни одного события"
+                                   description="События будут сохраняться по мере того,
+                           как пользователи будут взаимодействовать с вашим ботом.
+                           Откройте страницу позже"
+              />
+              <items-list v-else
                           :item-component="itemComponent"
                           :options-factory="createMessageOptions"
                           :items="messages"
@@ -213,10 +211,11 @@ export default {
         filter: this.appliedFilter
       }
     },
-    createMessageOptions() {
+    createMessageOptions(message) {
       return {
         hasOpenChatButton: !this.chatId,
-        goToRepliedMessageEvent: this.$appEvents.botEvents.goToMessage
+        goToRepliedMessageEvent: this.$appEvents.botEvents.goToMessage,
+        isCurrentBot: message.from.id == this.botId
       }
     },
     async handleServerError(error) {
