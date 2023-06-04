@@ -4,12 +4,17 @@
     <template v-else>
       <information-display v-if="bots.length === 0"
                            :image-ref="require('@/assets/icons/empty-result.svg')"
-                           title="В архиве нет ни одного бота"
+                           title="В архив не добавлено ни одного бота"
       >
         <template #description>
           Добавляйте в архив ботов, которые больше
           не используются Вами, чтобы они не занимали места в
-          <router-link :to="{name: $routeNames.bots}">Cписке Ваших ботов</router-link>
+          <router-link
+              :to="{name: $routeNames.bots}"
+              class="bots-page-link"
+          >
+            Cписке Ваших ботов
+          </router-link>
         </template>
       </information-display>
       <section class="archive-page-content">
@@ -29,10 +34,10 @@ import {mapGetters, mapActions} from "vuex";
 
 import DisposableEventsMixin from "@/components/mixins/DisposableEventsMixin";
 
-import BotCard from "@/components/pages/myBotsPage/BotCard";
+import BotCard from "@/components/pages/myBotsPage/primitives/BotCard";
 import CardsList from "@/components/primitives/controls/CardsList";
-import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
+import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
 
 export default {
   components: {InformationDisplay, LoadingDisplay, CardsList},
@@ -56,12 +61,7 @@ export default {
       }
     },
     async unarchiveBot(botInfo) {
-      try {
-        await this.$store.dispatch('archive/unarchive', botInfo.bot.id)
-      }
-      catch (error) {
-        console.log(error)
-      }
+      await this.$store.dispatch('archive/unarchive', botInfo.bot.id)
     },
     ...mapActions({
       load: 'archive/load',
@@ -83,6 +83,7 @@ export default {
 <style scoped lang="scss">
 
 @import '/src/assets/scss/patterns/contentAdjustment';
+@import '/src/assets/scss/controls/buttons';
 
 .archive-page {
   @extend %full-page-content;
@@ -90,6 +91,10 @@ export default {
 
 .archive-page-content {
   @extend %page-content
+}
+
+.bots-page-link {
+  @extend %inline-link;
 }
 
 </style>

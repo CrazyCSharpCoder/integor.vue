@@ -5,6 +5,8 @@ import MyBotsPage from "@/components/pages/myBotsPage/Index";
 import BotEventsPage from '@/components/pages/botEventsPage/Index'
 import NotFoundPage from "@/components/pages/NotFoundPage";
 import ArchivePage from "@/components/pages/ArchivePage";
+import MyBotsPageContextActions from "@/components/pages/myBotsPage/ContextActions";
+import RecentBotsNavigation from "@/components/pages/botEventsPage/RecentBotsNavigation";
 
 export default [
     {
@@ -15,7 +17,10 @@ export default [
             {
                 name: routeNames.bots,
                 path: '',
-                component: MyBotsPage
+                components: {
+                    default: MyBotsPage,
+                    contextActions: MyBotsPageContextActions
+                }
             },
             {
                 name: routeNames.archive,
@@ -25,7 +30,10 @@ export default [
             {
                 name: routeNames.botEvents,
                 path: 'bot-:botId/page-:page',
-                component: BotEventsPage
+                components: {
+                    default: BotEventsPage,
+                    contextActions: RecentBotsNavigation
+                }
             }
         ]
     },

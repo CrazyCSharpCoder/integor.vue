@@ -18,7 +18,7 @@ export default {
 $circles-count: 5;
 $circle-radius: 12px;
 
-$loading-color: $color-5;
+$loading-color: $color-1-shade-5;
 
 $duration: 1.5s;
 
@@ -36,7 +36,7 @@ $duration: 1.5s;
 
 .loading-animation {
   display: flex;
-  gap: $padding-step;
+  gap: $padding-step-large;
 }
 
 .circle {

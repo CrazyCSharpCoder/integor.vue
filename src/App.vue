@@ -13,6 +13,8 @@ export default {
 
 <style lang="scss">
 @import '/src/assets/scss/palette';
+@import '/src/assets/scss/text';
+
 @import '/src/assets/scss/patterns/contentAdjustment';
 
 * {
@@ -27,6 +29,8 @@ html {
 
   display: flex;
   flex-direction: column;
+
+  scroll-behavior: smooth;
 }
 
 body {
@@ -39,8 +43,11 @@ body {
 #app {
   @extend %full-page-content;
 
-  background: $color-3;
-  color: $color-3-text;
-  font-family: sans-serif;
+  background: $background-color;
+  color: $background-text-color;
+
+  font-family: "Roboto", sans-serif;
+
+  font-size: 14px;
 }
 </style>

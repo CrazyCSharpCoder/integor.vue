@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
-import LoadingAnimation from "@/components/primitives/InformationDisplay/primitives/LoadingAnimation";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
+import LoadingAnimation from "@/components/primitives/informationDisplay/primitives/LoadingAnimation";
 
 export default {
   name: "LoadingDisplay",

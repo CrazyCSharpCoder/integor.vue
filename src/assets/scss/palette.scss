@@ -1,14 +1,24 @@
-$color-1: #353535;
-$color-2: #3C6E71;
-$color-3: #FFFFFF;
-$color-4: #D9D9D9;
-$color-5: #284B63;
+$background-color: #1E1E1E;
+$background-text-color: #EEEEEE;
 
-$color-1-text: #FFFFFF;
-$color-2-text: #FFFFFF;
-$color-3-text: #2f2f2f;
-$color-4-text: #2f2f2f;
-$color-5-text: #FFFFFF;
+$color-1-shade-1: #181818;
+$color-1-shade-2: #2B2B2B;
+$color-1-shade-3: #363636;
+$color-1-shade-4: #464646;
+$color-1-shade-5: #595959; // Secondary button
+$color-1-shade-6: #757575; // Secondary button hover
 
-$error-color-1: #ab0000;
-$error-color-2: #e00000;
+$color-1-text: #EEEEEE;
+
+$color-2-shade-1: #58568D;
+$color-2-shade-2: #716fb2; // Primary button hover
+$color-2-text: #EEEEEE;
+
+$color-contrast: #e8e8e8;
+$color-contrast-shade-2: #c4c4c4; // Button hover
+
+$color-contrast-text: #222222;
+
+$error-color-shade-1: #CC4F4F;
+$error-color-shade-2: #d31b1b; // Button hover
+$error-color-text: #EEEEEE;

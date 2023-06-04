@@ -1,9 +1,15 @@
 @import "./contentAdjustment";
 
-$h1-font-size: 30px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
+
+$bold: 700;
+
+$h1-font-size: 28px;
 $h2-font-size: 24px;
-$h3-font-size: 18px;
+$h3-font-size: 20px;
 
 $small-font-size: 12px;
 
-$p-margin: $padding-step;
+$p-margin: $padding-step-large;

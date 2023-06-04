@@ -4,9 +4,11 @@
     <template #default>
       <div v-if="isActive" class="add-bot-form-container">
         <input-bot-form
-            :submit-event="$appEvents.bots.submitAddBot"
-            :form-error="theError"/>
+            :submit-event="$appEvents.bots.submitAddBot"/>
       </div>
+    </template>
+    <template v-if="theError" #footer>
+      <div class="modal-window-error">{{theError}}</div>
     </template>
   </headered-modal-window>
 </template>
@@ -14,7 +16,7 @@
 <script>
 import HeaderedModalWindow from "@/components/primitives/modalWindow/HeaderedModalWindow";
 import ModalWindowMixin from "@/components/primitives/modalWindow/ModalWindowMixin";
-import InputBotForm from "@/components/pages/myBotsPage/InputBotForm";
+import InputBotForm from "@/components/pages/myBotsPage/primitives/InputBotForm";
 import ErrorHandlerMixin from "@/components/mixins/ErrorHandlerMixin";
 
 export default {
@@ -59,11 +61,24 @@ export default {
 
 <style scoped lang="scss">
 
+@import "/src/assets/scss/palette";
 @import "/src/assets/scss/contentAdjustment";
 
+@import "/src/assets/scss/patterns/contentAdjustment";
+
+$width: 360px;
+
 .add-bot-form-container {
-  padding: $modal-window-vertical-gap $modal-window-horizontal-gap;
-  width: 360px;
+  width: $width;
+  padding: $page-section-vertical-gap $page-section-horizontal-gap-small;
+}
+
+.modal-window-error {
+  background: $error-color-shade-1;
+  color: $error-color-text;
+
+  padding: $padding-step $page-section-horizontal-gap;
+  width: $width;
 }
 
 </style>

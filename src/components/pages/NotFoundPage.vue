@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
 
 export default {
   components: {InformationDisplay}

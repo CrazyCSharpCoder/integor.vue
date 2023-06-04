@@ -2,13 +2,17 @@
   <div class="my-bots-page">
     <loading-display v-if="!myBots"/>
     <template v-else>
-      <integor-extra-header>
+      <integor-extra-header v-if="recentBots && recentBots.length">
         <page-adjusted-content>
-          <ul class="bots-management-panel">
-            <li class="bots-management-panel-item">
-              <button @click="openAddBotModalWindow" class="bot-action">Добавить</button>
-            </li>
-          </ul>
+          <div class="recent-bots-menu">
+            <items-list
+                :horizontal="true"
+
+                :item-component="botHistoryComponent"
+                :items="recentBots"
+                :options-factory="createBotNavigationOptions"
+            />
+          </div>
         </page-adjusted-content>
       </integor-extra-header>
       <information-display v-if="myBots.length === 0"
@@ -21,11 +25,13 @@
         </template>
       </information-display>
       <section v-else class="my-bots-page-content">
-        <cards-list
-            :card-component="cardComponent"
-            :items="myBots"
-            :options-factory="createBotCardOptions"
-        />
+        <div class="cards-list-container">
+          <cards-list
+              :card-component="cardComponent"
+              :items="myBots"
+              :options-factory="createBotCardOptions"
+          />
+        </div>
       </section>
     </template>
     <add-bot-modal-window/>
@@ -38,19 +44,25 @@
 import {mapGetters} from 'vuex'
 import {shallowRef} from "vue";
 
-import BotCard from "@/components/pages/myBotsPage/BotCard";
+import BotCard from "@/components/pages/myBotsPage/primitives/BotCard";
+import BotGap from "@/components/primitives/userHistory/BotGap";
+
+import DisposableEventsMixin from "@/components/mixins/DisposableEventsMixin";
+
 import CardsList from "@/components/primitives/controls/CardsList";
 import IntegorExtraHeader from "@/components/primitives/IntegorExtraHeader";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import AddBotModalWindow from "@/components/pages/myBotsPage/modalWindows/AddBotModalWindow";
-import InformationDisplay from "@/components/primitives/InformationDisplay/InformationDisplay";
-import LoadingDisplay from "@/components/primitives/InformationDisplay/LoadingDisplay";
+import InformationDisplay from "@/components/primitives/informationDisplay/InformationDisplay";
+import LoadingDisplay from "@/components/primitives/informationDisplay/LoadingDisplay";
 import UpdateBotModalWindow from "@/components/pages/myBotsPage/modalWindows/UpdateBotModalWindow";
 import ArchiveBotModalWindow from "@/components/pages/myBotsPage/modalWindows/ArchiveBotModalWindow";
+import ItemsList from "@/components/primitives/controls/ItemsList";
 
 export default {
   name: 'MyBotsPage',
   components: {
+    ItemsList,
     ArchiveBotModalWindow,
     UpdateBotModalWindow,
     LoadingDisplay,
@@ -60,15 +72,22 @@ export default {
     IntegorExtraHeader,
     CardsList
   },
+  mixins: [
+    DisposableEventsMixin
+  ],
   data() {
     return {
-      cardComponent: shallowRef(BotCard)
+      cardComponent: shallowRef(BotCard),
+      botHistoryComponent: shallowRef(BotGap)
     }
   },
   computed: {
     ...mapGetters([
         'myBots'
-    ])
+    ]),
+    ...mapGetters({
+      recentBots: 'history/bots'
+    })
   },
   methods: {
     openAddBotModalWindow() {
@@ -79,9 +98,22 @@ export default {
         updateBotEvent: this.$appEvents.bots.openUpdateBotModalWindow,
         archiveBotEvent: this.$appEvents.bots.openArchiveBotModalWindow
       }
+    },
+    createBotNavigationOptions() {
+      return {
+        removeBotEvent: this.$appEvents.history.botGapClosed
+      }
+    },
+    closeBotNavigationGap(bot) {
+      this.$store.dispatch('history/removeBot', bot.id)
     }
   },
   async created() {
+    this.registerEvent(
+        this.$appEvents.history.botGapClosed,
+        this.closeBotNavigationGap
+    )
+
     await this.$store.dispatch('loadBots')
   }
 }
@@ -100,7 +132,11 @@ export default {
 }
 
 .my-bots-page-content {
-  @extend %page-content
+  @extend %page-content;
+}
+
+.cards-list-container {
+  margin: 0 (-$border-radius-large);
 }
 
 .bots-management-panel {
@@ -108,13 +144,17 @@ export default {
 
   .bots-management-panel-item {
     .bot-action {
-      @include button($color-4, $color-4-text);
+      @include button($color-1-shade-4, $color-1-text);
     }
   }
 }
 
 .add-bot {
   @include button();
+}
+
+.recent-bots-menu {
+  margin: 0 (-$border-radius);
 }
 
 </style>

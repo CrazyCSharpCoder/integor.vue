@@ -2,15 +2,25 @@ import api from "@/api";
 
 const pageSize = 20
 
+function filterToBody(filter) {
+    return  Object.fromEntries(
+        Object.entries(filter).filter(entry => entry[1] !== undefined)
+    )
+}
+
 export default {
     namespaced: true,
 
     state() {
         return {
             bot: undefined,
+            webhookInfo: undefined,
+
             totalEvents: undefined,
             filteredEvents: undefined,
+
             messages: undefined,
+
             filter: undefined
         }
     },
@@ -18,6 +28,10 @@ export default {
         bot(state) {
             return state.bot
         },
+        webhookInfo(state) {
+            return state.webhookInfo
+        },
+
         totalEvents(state) {
             return state.totalEvents
         },
@@ -35,8 +49,16 @@ export default {
         }
     },
     mutations: {
-        SET_INFO(state, {bot, totalEvents, filteredEvents, messages, filter}) {
+        SET_INFO(state, {
+            bot,
+            totalEvents,
+            filteredEvents,
+            messages,
+            filter,
+            webhookInfo
+        }) {
             state.bot = bot
+            state.webhookInfo = webhookInfo
 
             state.totalEvents = totalEvents
             state.filteredEvents = filteredEvents
@@ -45,8 +67,15 @@ export default {
 
             state.filter = filter
         },
+        SET_MESSAGES(state, messages) {
+            state.messages = messages
+        },
+        SET_BOT(state, bot) {
+            state.bot = bot
+        },
         DISCARD(state) {
-            state.bot = state.totalEvents = state.messages = undefined
+            Object.keys(state)
+                .forEach(key => state[key] = undefined)
         }
     },
     actions: {
@@ -56,22 +85,43 @@ export default {
         async load({commit}, {botId, pageIndex, filter}) {
             const startIndex = pageIndex * pageSize
 
-            filter = Object.fromEntries(
-                Object.entries(filter).filter(entry => entry[1] !== undefined)
-            )
+            filter = filterToBody(filter)
 
             const botEventsInfo = await api.botEvents.getEvents(
                 botId, startIndex, pageSize, filter
             )
+            const webhookInfo = await api.webhook.getWebhookInfo(
+                botEventsInfo.bot.token
+            )
+
             commit('SET_INFO', {
                 bot: botEventsInfo.bot,
                 totalEvents: botEventsInfo.totalEvents,
                 filteredEvents: botEventsInfo.filteredEvents,
                 messages: botEventsInfo.messages,
-                filter: botEventsInfo.filter
+                filter: botEventsInfo.filter,
+                webhookInfo
             })
 
             return botEventsInfo
+        },
+        async updateBot({commit}, bot) {
+            const updateResult = await api.bots.updateBot(bot)
+            commit('SET_BOT', updateResult.bot)
+
+            return bot
+        },
+        async searchMessage({commit}, {botId, chatId, messageId, filter}) {
+            filter = filterToBody(filter)
+
+            const response = await api.botEvents.searchMessage(
+                botId, chatId, messageId,
+                pageSize, filter
+            )
+
+            commit('SET_MESSAGES', response.messages)
+
+            return response
         }
     }
 }

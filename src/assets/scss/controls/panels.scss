@@ -4,7 +4,7 @@
   list-style: none;
 }
 
-@mixin panel($gap: $padding-step) {
+@mixin panel($gap: $padding-step-large) {
   @extend %list-reset;
 
   display: flex;
@@ -13,16 +13,31 @@
   gap: $gap;
 }
 
-%breadcrumbs {
+@mixin breadcrumbs($padding: $padding-step, $separator-color: rgba(255, 255, 255, 0.3)) {
   display: flex;
   align-items: flex-end;
 
   %breadcrumbs-item::after {
     content: '/';
-    color: rgba(0, 0, 0, 0.3);
-    padding: 4px;
+    color: $separator-color;
+    padding: $padding;
   }
   %breadcrumbs-item:last-child::after {
     content: none;
+  }
+}
+
+%dropdown {
+  position: relative;
+
+  %content {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover %content {
+    opacity: 1;
+    pointer-events: visible;
   }
 }

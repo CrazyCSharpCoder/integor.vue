@@ -1,23 +1,30 @@
 <template>
   <form @submit.prevent="submitData" class="bot-input">
-    <div class="form-fields">
-      <div class="form-field">
+    <div class="form-items">
+      <div class="form-item">
         <input v-model="input.title" type="text" placeholder="Наименование бота"
                :class="['input', {'error': titleInvalid}]"/>
         <div v-if="titleInvalid" class="input-error">
           {{outputFirst(v$.input.title)}}
         </div>
       </div>
-      <div class="form-field">
+      <div class="form-item">
         <input v-model="input.token" type="text" placeholder="Токен бота"
                :class="['input', {error: tokenInvalid}]"/>
         <div v-if="tokenInvalid" class="input-error">
           {{outputFirst(v$.input.token)}}
         </div>
       </div>
-    </div>
-    <div class="form-controls">
-      <button class="confirm">Подтвердить</button>
+      <div class="form-item description">
+        <textarea v-model="input.description" placeholder="Описание"
+               :class="['input', {error: descriptionInvalid}]"/>
+        <div v-if="descriptionInvalid" class="input-error">
+          {{outputFirst(v$.input.description)}}
+        </div>
+      </div>
+      <div class="form-item form-controls">
+        <button class="confirm">Подтвердить</button>
+      </div>
     </div>
     <div class="form-error">
       {{formError}}
@@ -53,6 +60,9 @@ export default {
     },
     tokenInvalid() {
       return Boolean(this.errorsCount(this.v$.input.token))
+    },
+    descriptionInvalid() {
+      return Boolean(this.errorsCount(this.v$.input.description))
     }
   },
   validations() {
@@ -79,6 +89,12 @@ export default {
               'Значение не является токеном Telegram бота',
               () => this.$appConfiguration.validation.bots.token(this.input.token)
           )
+        },
+        description: {
+          validDescription: helpers.withMessage(
+              'Описание содержит недопустимые символы',
+              () => this.$appConfiguration.validation.bots.description(this.input.description)
+          )
         }
       }
     }
@@ -88,46 +104,49 @@ export default {
 
 <style lang="scss">
 
-@import "/src/assets/scss/palette";
-@import "/src/assets/scss/contentAdjustment";
+@import "../../../../assets/scss/palette";
+@import "../../../../assets/scss/contentAdjustment";
 
-@import "/src/assets/scss/controls/input";
-@import "/src/assets/scss/controls/buttons";
-@import "/src/assets/scss/patterns/contentAdjustment";
-@import "/src/assets/scss/patterns/forms";
+@import "../../../../assets/scss/controls/input";
+@import "../../../../assets/scss/controls/buttons";
+@import "../../../../assets/scss/patterns/contentAdjustment";
+@import "../../../../assets/scss/patterns/forms";
 
 .bot-input {
   width: 100%;
 
-  .form-fields, .form-controls {
-    padding: $padding-step-small * 3 0;
-  }
+  .form-items {
+    @include vertical-list($padding-step-large);
 
-  .form-fields {
-    @include vertical-list($padding-step-small);
-
-    .form-field {
+    .form-item {
       @extend %list-item;
 
       .input {
-        @include input($color-2, $color-5);
         width: 100%;
 
-        &.information {
+        &.error {
           @extend %error-input;
         }
       }
+      input.input {
+        @include input();
+      }
+      textarea.input {
+        @include textarea();
+        height: 120px;
+      }
+
       .input-error {
         @extend %form-error;
+
+        padding-left: $border-radius + 2px;
       }
     }
   }
 
   .form-controls {
-    border-top: 1px solid $color-3;
-
     .confirm {
-      @include button($color-5, $color-5-text);
+      @include button();
       width: 100%;
     }
   }

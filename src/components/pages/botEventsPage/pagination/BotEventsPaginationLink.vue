@@ -45,15 +45,29 @@ export default {
 @import "/src/assets/scss/controls/buttons";
 
 .page {
-  @include button;
+  @extend %secondary-button;
+
   user-select: none;
   text-align: center;
 
+  border-radius: 50%;
+
   padding: 0;
 
+  white-space: nowrap;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  line-height: inherit;
+
   &.selected {
-    @include button($color-1, $color-1-text);
-    padding: 0;
+    background: $color-2-shade-1;
+
+    &:hover, &:focus {
+      background: $color-2-shade-2;
+    }
   }
 }
 
