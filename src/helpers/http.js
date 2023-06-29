@@ -5,7 +5,10 @@ function appendQuery(url, queryParams) {
 }
 
 async function handle(url, params, asJson = true) {
-    const config = {method: params?.method ?? 'GET'}
+    const config = {
+        method: params?.method ?? 'GET',
+        credentials: 'include'
+    }
 
     if (params?.body) {
         config.body = JSON.stringify(params.body)

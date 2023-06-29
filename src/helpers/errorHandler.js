@@ -21,7 +21,11 @@ function getErrorEvent(error) {
     return appEvents.errors.applicationError
 }
 
-export default function (error, component) {
+export function errorHandlerInternal(error, emitter) {
     const emittedEvent = getErrorEvent(error)
-    component.$emitter.emit(emittedEvent, error)
+    emitter.emit(emittedEvent, error)
+}
+
+export default function (error, component) {
+    errorHandlerInternal(error, component.$emitter)
 }

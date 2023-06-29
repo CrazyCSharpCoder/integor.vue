@@ -14,36 +14,21 @@
     </page-adjusted-content>
   </integor-header>
   <main class="main">
-    <connection-failed-display v-if="hasConnectionFailedError"/>
-    <server-error-display v-else-if="hasServerError" :server-error="serverError"/>
-    <router-view v-else></router-view>
+    <router-view></router-view>
   </main>
-  <integor-footer>
-    <page-adjusted-content>
-      <router-view name="footer">
-<!--        TODO add content-->
-        <h1>Footer</h1>
-      </router-view>
-    </page-adjusted-content>
-  </integor-footer>
+  <integor-default-footer/>
 </template>
 
 <script>
 import {shallowRef} from "vue";
-import appEvents from "@/helpers/appEvents";
 import routeNames from "@/router/routeNames";
 
-import ConnectionFailderHandlingMixin from '@/components/mixins/errorHandling/ConnectionFailderHandlingMixin'
-import ServerErrorHandlingMixin from '@/components/mixins/errorHandling/ServerErrorHandlingMixin'
-
 import IntegorHeader from "@/components/primitives/IntegorHeader";
-import IntegorFooter from "@/components/primitives/IntegorFooter";
 import PageAdjustedContent from "@/components/primitives/contentAdjustment/PageAdjustedContent";
 import NavigationPanel from "@/components/primitives/panels/NavigationPanel";
 import NavigationItem from "@/components/primitives/special/HeaderNavItem";
-import ConnectionFailedDisplay from "@/components/primitives/informationDisplay/ConnectionFailedDisplay";
-import ServerErrorDisplay from "@/components/primitives/informationDisplay/ServerErrorDisplay";
 import LeftRightContent from "@/components/primitives/contentAdjustment/LeftRightContent";
+import IntegorDefaultFooter from "@/components/primitives/IntegorDefaultFooter";
 
 const navigationItems = [
   {
@@ -58,19 +43,9 @@ const navigationItems = [
 
 export default {
   components: {
-    LeftRightContent,
-    ServerErrorDisplay,
-    ConnectionFailedDisplay, NavigationPanel, PageAdjustedContent, IntegorFooter, IntegorHeader},
-  mixins: [
-      ConnectionFailderHandlingMixin(
-          appEvents.connection.connectionFailedError,
-          appEvents.connection.connectionRestoredError
-      ),
-      ServerErrorHandlingMixin(
-          appEvents.errors.serverError,
-          appEvents.errors.discardServerError
-      )
-  ],
+    IntegorDefaultFooter,
+    LeftRightContent, NavigationPanel, PageAdjustedContent, IntegorHeader
+  },
   data() {
     return {
       navigationItems,

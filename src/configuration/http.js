@@ -1,4 +1,4 @@
-const domain = 'http://localhost:5083/'
+const domain = 'http://localhost:5022/'
 
 const methods = {
     get: 'GET',

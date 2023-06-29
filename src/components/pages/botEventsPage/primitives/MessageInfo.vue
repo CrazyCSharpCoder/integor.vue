@@ -29,6 +29,10 @@
               {{from.isBot}}
             </div>
           </div>
+          <div v-if="from.username" class="info-attribute">
+            <span class="attribute-name">Username:</span>
+            @{{from.username}}
+          </div>
           <div class="info-row">
             <div class="info-attribute">
               <span class="attribute-name">First name:</span>
@@ -53,6 +57,10 @@
               {{chat.type}}
             </div>
           </div>
+          <div v-if="chat.username" class="info-attribute">
+            <span class="attribute-name">Username:</span>
+            @{{chat.username}}
+          </div>
           <div class="info-row">
             <div class="info-attribute">
               <span class="attribute-name">First name:</span>
@@ -70,10 +78,10 @@
       </div>
       <div class="separator"></div>
       <div class="message-content-info">
-        <div class="info-row info-attribute">
-          <!--        TODO display real value-->
-          <span class="attribute-name">Вложения:</span>&nbsp;сообщение не имеет вложений
-        </div>
+<!--        <div class="info-row info-attribute">-->
+<!--          &lt;!&ndash;        TODO display real value&ndash;&gt;-->
+<!--          <span class="attribute-name">Вложения:</span>&nbsp;сообщение не имеет вложений-->
+<!--        </div>-->
         <div class="message-info-group">
           <div class="title">Текст сообщения</div>
           <div class="message-text">

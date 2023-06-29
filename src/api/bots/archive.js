@@ -11,11 +11,11 @@ const urls = {
 
 export default {
     async archiveBot(botId) {
-        const url = domain + prefix + urls.archive + botId
+        const url = domain + prefix + botId + '/' + urls.archive
         return await handle(url, {method: methods.post})
     },
     async unarchiveBot(botId) {
-        const url = domain + prefix + urls.unarchive + botId
+        const url = domain + prefix + botId + '/' + urls.unarchive
         return await handle(url, {method: methods.post})
     },
     async getArchivedBots() {

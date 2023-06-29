@@ -1,11 +1,9 @@
 import {handle} from "@/helpers/http";
-import {methods} from "@/configuration/http";
-
-const domain = 'http://localhost:5116/'
+import {domain, methods} from "@/configuration/http";
 
 export default {
     async getWebhookInfo(botToken) {
-        const url = `${domain}bot${botToken}/getWebhookInfo`
+        const url = `${domain}bots/${botToken}/getWebhookInfo`
 
         return await handle(url, {
             method: methods.get

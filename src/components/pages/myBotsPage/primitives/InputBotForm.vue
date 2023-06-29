@@ -104,13 +104,13 @@ export default {
 
 <style lang="scss">
 
-@import "../../../../assets/scss/palette";
-@import "../../../../assets/scss/contentAdjustment";
+@import "/src/assets/scss/palette";
+@import "/src/assets/scss/contentAdjustment";
 
-@import "../../../../assets/scss/controls/input";
-@import "../../../../assets/scss/controls/buttons";
-@import "../../../../assets/scss/patterns/contentAdjustment";
-@import "../../../../assets/scss/patterns/forms";
+@import "/src/assets/scss/controls/input";
+@import "/src/assets/scss/controls/buttons";
+@import "/src/assets/scss/patterns/contentAdjustment";
+@import "/src/assets/scss/patterns/forms";
 
 .bot-input {
   width: 100%;

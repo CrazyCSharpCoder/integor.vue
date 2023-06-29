@@ -2,5 +2,10 @@ export default {
     bots: 'bots',
     archive: 'archive',
     botEvents: 'botEvents',
-    notFound: 'notFound'
+    notFound: 'notFound',
+
+    auth: {
+        login: 'login',
+        register: 'register'
+    }
 }

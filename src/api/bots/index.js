@@ -29,8 +29,8 @@ export default {
         const url = http.domain + prefix + id
         return await handle(url)
     },
-    async getAll() {
-        const url = http.domain + prefix + 'all'
+    async getMy() {
+        const url = http.domain + prefix + 'my-bots/'
         return await handle(url)
     }
 }

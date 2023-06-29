@@ -44,7 +44,7 @@ export default {
     },
     actions: {
         async loadBots({commit}) {
-            const bots = await api.bots.getAll()
+            const bots = await api.bots.getMy()
             commit('SET_MY_BOTS', bots)
 
             return bots

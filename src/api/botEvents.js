@@ -18,7 +18,7 @@ export default {
         })
     },
     async searchMessage(botId, chatId, messageId, pageSize, filter) {
-        const url = domain + prefix + `bot-${botId}` + '/search-message'
+        const url = domain + prefix + botId + '/search-message'
 
         return await handle(url, {
             method: methods.post,
