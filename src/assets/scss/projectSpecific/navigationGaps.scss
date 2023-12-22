@@ -1,0 +1,100 @@
+@import "../palette";
+@import "../animations";
+@import "../contentAdjustment";
+
+@import "../patterns/contentAdjustment";
+
+@import "../controls/buttons";
+@import "../controls/panels";
+
+$hover-color: $color-contrast;
+$hover-color-2: $color-contrast-shade-2;
+
+$hover-text-color: $color-contrast-text;
+
+%nav-gap {
+  %nav-gap-title {
+    transition: $transition;
+
+    @include round-borders-control();
+    @extend %link-reset;
+
+    display: block;
+
+    &:hover {
+      background: $hover-color;
+      color: $hover-text-color;
+    }
+  }
+
+  &%dropdown:hover {
+    %nav-gap-title {
+      background: $hover-color;
+      color: $hover-text-color;
+    }
+  }
+
+  &%current-nav-gap %nav-gap-title {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  &%current-nav-gap%dropdown:hover %nav-gap-title {
+    background: $hover-color-2;
+  }
+
+  %content {
+    margin-top: $padding-step-large;
+
+    min-width: fit-content;
+    width: 100%;
+
+    &::before {
+      position: absolute;
+      top: -$padding-step-large;
+
+      width: 100%;
+      height: $padding-step-large;
+
+      content: '';
+    }
+  }
+
+  %nav-gap-actions {
+    @extend %list-reset;
+
+    transition: $transition;
+    border-radius: $border-radius;
+
+    background: $hover-color;
+    color: $hover-text-color;
+
+    overflow: hidden;
+  }
+
+  %nav-gap-action {
+    @include round-borders-control();
+
+    transition: $transition;
+    border-radius: 0;
+
+    text-align: center;
+
+    width: 100%;
+
+    &:hover {
+      background: $hover-color-2;
+    }
+  }
+
+  button%nav-gap-action {
+    @extend %button-reset;
+    cursor: pointer;
+  }
+
+  a%nav-gap-action {
+    @extend %link-reset;
+    display: block;
+  }
+}
+

@@ -1,0 +1,51 @@
+@import "../contentAdjustment";
+
+%page-horizontal-content {
+  padding: 0 $page-horizontal-gap;
+}
+
+%page-vertical-content {
+  padding: $page-vertical-gap 0;
+}
+
+%page-content {
+  padding: $page-vertical-gap $page-horizontal-gap;
+}
+
+%content-section {
+  padding: $page-section-vertical-gap 0;
+}
+
+%full-page-content {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+%controls-container {
+  margin: 0 $page-section-horizontal-gap-small - $page-section-horizontal-gap;
+}
+
+@mixin round-borders-control($border-radius: $border-radius, $border-width: 0) {
+  border-width: $border-width;
+
+  border-radius: $border-radius;
+  line-height: ($border-radius - $border-width) * 2;
+  padding: 0 $border-radius;
+}
+
+@mixin vertical-list($margin-vert) {
+  margin: -$margin-vert 0;
+
+  %list-item {
+    padding: $margin-vert 0;
+  }
+}
+
+@mixin horizontal-vertical-list($margin-vert, $margin-hor) {
+  margin: (-$margin-vert) (-$margin-hor);
+
+  %list-item {
+    padding: $margin-vert $margin-hor;
+  }
+}

@@ -1,0 +1,8 @@
+@import "../text";
+@import "../palette";
+
+%form-error {
+  font-size: $small-font-size;
+  color: $error-color-shade-1;
+  padding-top: 2px;
+}

@@ -1,0 +1,20 @@
+// Padding steps
+$padding-step: 4px;
+$padding-step-large: $padding-step * 2;
+
+// Borders
+$border-radius: 14px;
+$border-radius-large: $padding-step * 5;
+
+// Page gap
+$page-horizontal-gap: $padding-step-large * 16;
+$page-vertical-gap: $padding-step-large * 4;
+
+// Page sections
+$page-section-vertical-gap: $border-radius;
+$page-section-horizontal-gap: $border-radius * 2;
+$page-section-horizontal-gap-small: $border-radius;
+
+// Elements
+$modal-window-horizontal-gap: $padding-step-large * 2;
+$modal-window-vertical-gap: $padding-step-large;
