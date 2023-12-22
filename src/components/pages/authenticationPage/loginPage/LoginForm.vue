@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="form-item">
-        <input v-model="input.password" type="text" placeholder="Ваш пароль"
+        <input v-model="input.password" type="password" placeholder="Ваш пароль"
                :class="['input', {error: passwordInvalid}]"/>
         <div v-if="passwordInvalid" class="input-error">
           {{outputFirst(v$.input.password)}}

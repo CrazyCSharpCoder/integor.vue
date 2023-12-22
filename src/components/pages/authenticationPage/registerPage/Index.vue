@@ -8,7 +8,7 @@
     </div>
     <div class="login-link-message">
       Вы - зарегистрированный пользователь? -
-      <router-link :to="$routeNames.auth.login" class="login-link">
+      <router-link :to="{name: $routeNames.auth.login}" class="login-link">
         войти
       </router-link>
     </div>

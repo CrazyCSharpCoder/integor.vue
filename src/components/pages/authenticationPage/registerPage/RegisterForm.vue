@@ -9,14 +9,14 @@
         </div>
       </div>
       <div class="form-item">
-        <input v-model="input.password" type="text" placeholder="Ваш пароль"
+        <input v-model="input.password" type="password" placeholder="Ваш пароль"
                :class="['input', {error: passwordInvalid}]"/>
         <div v-if="passwordInvalid" class="input-error">
           {{outputFirst(v$.input.password)}}
         </div>
       </div>
       <div class="form-item">
-        <input v-model="input.passwordRepeat" type="text" placeholder="Повторите пароль"
+        <input v-model="input.passwordRepeat" type="password" placeholder="Повторите пароль"
                :class="['input', {error: passwordRepeatInvalid}]"/>
         <div v-if="passwordRepeatInvalid" class="input-error">
           {{outputFirst(v$.input.passwordRepeat)}}

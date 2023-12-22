@@ -8,7 +8,7 @@
     </div>
     <div class="register-link-message">
       У Вас нет учётной записи? -
-      <router-link :to="$routeNames.auth.register" class="register-link">
+      <router-link :to="{name: $routeNames.auth.register}" class="register-link">
         зерегистрироваться
       </router-link>
     </div>
